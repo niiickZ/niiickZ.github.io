@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>卷积神经网络CNN | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么要CNN在之前的mnist分类中，我们构造了一个只包含全连接层的网络为了将图片输入到这样的网络中，我们先对图片进行了一维展开然而显然图片本身具有二维的空间信息，一维展开相当于直接丢弃了这部分信息而卷积神经网络CNN（Convolution Neural Net）就是为了更好的利用起这部分信息而存在的 卷积运算卷积层与滤波卷积运算与传统图像处理的滤波操作是基本相同的首先除了图像本身我们需要还一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积神经网络CNN">
+<meta property="og:url" content="https://niiickz.github.io/2022/01/08/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CCNN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么要CNN在之前的mnist分类中，我们构造了一个只包含全连接层的网络为了将图片输入到这样的网络中，我们先对图片进行了一维展开然而显然图片本身具有二维的空间信息，一维展开相当于直接丢弃了这部分信息而卷积神经网络CNN（Convolution Neural Net）就是为了更好的利用起这部分信息而存在的 卷积运算卷积层与滤波卷积运算与传统图像处理的滤波操作是基本相同的首先除了图像本身我们需要还一个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-01-08T08:23:54.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.235Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/01/08/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CCNN/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '卷积神经网络CNN',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">卷积神经网络CNN</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-01-08T08:23:54.000Z" title="Created 2022-01-08 16:23:54">2022-01-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.235Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="卷积神经网络CNN"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="什么要CNN"><a href="#什么要CNN" class="headerlink" title="什么要CNN"></a>什么要CNN</h2><p>在之前的mnist分类中，我们构造了一个只包含全连接层的网络<br>为了将图片输入到这样的网络中，我们先对图片进行了<strong>一维展开</strong><br>然而显然图片本身具有<strong>二维的空间信息</strong>，一维展开相当于直接丢弃了这部分信息<br>而卷积神经网络CNN（Convolution Neural Net）就是为了更好的利用起这部分信息而存在的</p>
+<h2 id="卷积运算"><a href="#卷积运算" class="headerlink" title="卷积运算"></a>卷积运算</h2><h3 id="卷积层与滤波"><a href="#卷积层与滤波" class="headerlink" title="卷积层与滤波"></a>卷积层与滤波</h3><p>卷积运算与传统图像处理的<strong>滤波</strong>操作是基本相同的<br>首先除了图像本身我们需要还一个<strong>卷积核</strong><br>然后对于图像的每一个像素点，计算它的邻域像素和卷积核的对应元素的乘积并累加，作为输出图像该像素位置的值<br>即完成了一次卷积运算<br>唯一与滤波不同的是，卷积核的参数是<strong>可学习的</strong></p>
+<p><img src="G:\code\cloud\blog\img\conv.png" alt="conv"></p>
+<p>注意到神经网络每层还应该有<strong>偏置</strong><br>在卷积神经层中，偏置也是一个单独的数，会<strong>在卷积运算完成后加到输出图像上的每个像素位</strong></p>
+<p>一般情况下，我们将卷积层的输入输出数据都成为特征图（feature map）</p>
+<h3 id="步幅与填充"><a href="#步幅与填充" class="headerlink" title="步幅与填充"></a>步幅与填充</h3><p>卷积运算中每次卷积核移动的步长称为步幅（stride）</p>
+<p>显然卷积核<strong>步幅越大</strong>，卷积完成后的<strong>输出特征图尺寸就越小</strong><br>即使步长为1，输出特征图尺寸相较输入特征图也会缩小</p>
+<p>这时候为了保持输出特征图尺寸不变或缩小指定尺寸，就需要<strong>填充</strong>（padding）<br>即在输入特征图的四周添加多余的像素点，扩大输入图的尺寸<br>填充的方法有反射填充、0填充，重复填充等，一般0填充使用较多</p>
+<p>假设输入图像尺寸为$(H,W)$，卷积核尺寸为$(FH,FW)$，输出为$(OH,OW)$，填充为$P$，步幅为$S$，则有</p>
+<script type="math/tex; mode=display">OH=\frac{H+2P-FH}{S}+1 \\ OW=\frac{W+2P-FW}{S}+1</script><h3 id="三维图像的卷积"><a href="#三维图像的卷积" class="headerlink" title="三维图像的卷积"></a>三维图像的卷积</h3><p>很多情况下图像数据并不止二维，它还包含了第三维的<strong>颜色通道</strong>（channel）<br>灰度图像是只有1个颜色通道的特例，彩色图像通道方向深度一般是3</p>
+<p>这时我们的卷积核也应该是<strong>三维的</strong>，且<strong>第三维深度与图像颜色通道数相同</strong><br>卷积运算需要对每个通道分别进行，然后<strong>将三个通道的输出图对应位置相加（element-wise addition）</strong>，得到最终的输出特征图</p>
+<p><img src="G:\code\cloud\blog\img\conv_3.png" alt="conv_3"></p>
+<p>我们总是希望CNN中每个卷积层可以多提取信息，但每次卷积后特征图的通道数就变为了1<br>因此一般每个卷积层都会有不止一个滤波器<br>设输入数据尺寸为$(C,H,W)$，滤波器尺寸为$(FN,C,FH,FW)$，则输出尺寸为$(FN,OH,OW)$，其中C为通道，FN为滤波器个数</p>
+<h2 id="下采样与池化"><a href="#下采样与池化" class="headerlink" title="下采样与池化"></a>下采样与池化</h2><p>图像的下采样即降低图像分辨率（缩小尺寸），并尽可能保留关键信息<br>池化层（Pooling）是卷积神经网络中经典的下采样手段</p>
+<p>池化一般分为<strong>最大池化</strong>和<strong>平均池化</strong><br>以最大池化为例，池化层用一个n×m的窗口依次滑过输入特征图，每次只留下窗口中的<strong>最大值</strong></p>
+<p><img src="G:\code\cloud\blog\img\pooling.png" alt="pooling"></p>
+<p>池化层有一个重要的特征，<strong>数据的微小扰动不会对结果造成较大影响</strong></p>
+<p>池化层是<strong>没有参数的</strong>，也即不需要神经网络学习<br>且池化后特征图的通道数不会发生变化</p>
+<p>实际上，池化操作存在很多问题<br>现在大多数CNN已经不再采用池化，而是直接以<strong>带步长的卷积</strong>代替了</p>
+<h2 id="空洞卷积"><a href="#空洞卷积" class="headerlink" title="空洞卷积"></a>空洞卷积</h2><p>空洞卷积（Dilation Convolution）最早出现于图像分割研究中<br>其目的是代替pooling做减小尺寸并增大感受野的操作</p>
+<p>如图所示，空洞卷积就是在卷积域中增加了空洞</p>
+<p><img src="D:\code\cloud\blog\img\dilation.gif" alt="dilation"></p>
+<p>假设空洞卷积核尺寸为$D$​​​，则卷积层的输入输出尺寸为</p>
+<p><script type="math/tex">OH=\frac{H+2P-D\times(FH-1)-1}{S}+1 \\ OW=\frac{W+2P-D\times(FW-1)-1}{S}+1</script>​</p>
+<p>关于空洞卷积作用的讨论有很多，此处不展开说明</p>
+<h2 id="上采样"><a href="#上采样" class="headerlink" title="上采样"></a>上采样</h2><p>上采样是和下采样相对的概念，即需要增大图像的分辨率<br>上采样有三种方法，分别为插值、UpPooling和反卷积</p>
+<p>UpPooling即最大池化反向操作，将最大值以外的位置用0填充</p>
+<p>反卷积（deconvolution）先按照一定的比例进行0填充扩大尺寸，再进行一次正常卷积</p>
+<p>关于UpPooling+Conv实现上采样和反卷积实现上采样的优劣有很多讨论，此处不展开说明</p>
+<h2 id="Pytorch使用CNN进行Mnist分类"><a href="#Pytorch使用CNN进行Mnist分类" class="headerlink" title="Pytorch使用CNN进行Mnist分类"></a>Pytorch使用CNN进行Mnist分类</h2><p>与<a target="_blank" rel="noopener" href="https://renns.top/post/4/">Pytorch入门——线性回归与分类</a>中只有网络定义部分不同</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Classifier</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># pytorch中卷积层张量维度顺序为(batch_size, channel, H, W)</span></span><br><span class="line">        self.conv1 = nn.Sequential(</span><br><span class="line">            <span class="comment"># conv2d参数——输入通道数、输出通道数、卷积核大小、步长、填充大小</span></span><br><span class="line">            nn.Conv2d(<span class="number">1</span>, <span class="number">16</span>, kernel_size=<span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.MaxPool2d(kernel_size=<span class="number">2</span>), <span class="comment"># 2x2的最大池化</span></span><br><span class="line">        )</span><br><span class="line">        self.conv2 = nn.Sequential(</span><br><span class="line">            nn.Conv2d(<span class="number">16</span>, <span class="number">32</span>, kernel_size=<span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.MaxPool2d(kernel_size=<span class="number">2</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        self.layer = nn.Linear(<span class="number">7</span> * <span class="number">7</span> * <span class="number">32</span>, <span class="number">256</span>)</span><br><span class="line">        self.outputLayer = nn.Linear(<span class="number">256</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, tensor_input</span>):</span><br><span class="line">        x = self.conv1(tensor_input)</span><br><span class="line">        x = self.conv2(x)</span><br><span class="line"></span><br><span class="line">        x = x.view(x.size(<span class="number">0</span>), -<span class="number">1</span>)  <span class="comment"># 一维展开,展开为后(batch_size, channel*H*W)</span></span><br><span class="line">        x = self.layer(x)</span><br><span class="line">        out = self.outputLayer(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure>
+<h2 id="Keras使用CNN进行Mnist分类"><a href="#Keras使用CNN进行Mnist分类" class="headerlink" title="Keras使用CNN进行Mnist分类"></a>Keras使用CNN进行Mnist分类</h2><p>与<a target="_blank" rel="noopener" href="https://renns.top/post/6/">Keras入门——线性回归与分类</a>中只有网络定义部分不同</p>
+<p>注意keras以tensorflow为后端时默认的图片通道在第三维</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">buildNet</span>():</span><br><span class="line">    model = Sequential()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># output_shape(28, 28, 32)</span></span><br><span class="line">    model.add(Conv2D(</span><br><span class="line">        input_shape=(<span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>),</span><br><span class="line">        filters=<span class="number">32</span>,  <span class="comment"># 滤波器个数</span></span><br><span class="line">        kernel_size=(<span class="number">5</span>, <span class="number">5</span>),  <span class="comment"># 卷积核大小</span></span><br><span class="line">        <span class="comment"># strides=(1, 1), 卷积沿宽度和高度方向的步长,默认(1,1)</span></span><br><span class="line">        padding=<span class="string">&#x27;same&#x27;</span>,  <span class="comment"># 边缘填充方法,可选&quot;valid&quot;/&quot;same&quot;,&quot;valid&quot;-不填充,&quot;same&quot; 填充以使图片维度不变</span></span><br><span class="line">        data_format=<span class="string">&#x27;channels_last&#x27;</span>, <span class="comment"># 指定通道在哪一维度</span></span><br><span class="line">        <span class="comment"># dilation_rate=(1,1), 膨胀卷积的膨胀率</span></span><br><span class="line">        <span class="comment"># use_bias=True, 该层是否使用偏置向量</span></span><br><span class="line">        <span class="comment"># activation, 激活函数</span></span><br><span class="line">    ))</span><br><span class="line">    model.add(Activation(<span class="string">&#x27;relu&#x27;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># output_shape(14, 14, 32)</span></span><br><span class="line">    model.add(MaxPooling2D(</span><br><span class="line">        pool_size=(<span class="number">2</span>, <span class="number">2</span>), <span class="comment"># # 2x2窗口的最大池化</span></span><br><span class="line">        strides=(<span class="number">2</span>, <span class="number">2</span>), <span class="comment"># 步长,如果是None则使用pool_size</span></span><br><span class="line">        padding=<span class="string">&#x27;same&#x27;</span>,</span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">    model.add(Conv2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), padding=<span class="string">&#x27;same&#x27;</span>, activation=<span class="string">&#x27;relu&#x27;</span>))  <span class="comment"># output_shape(14, 14, 64)</span></span><br><span class="line">    model.add(MaxPooling2D(pool_size=(<span class="number">2</span>, <span class="number">2</span>), padding=<span class="string">&#x27;same&#x27;</span>))  <span class="comment"># output_shape(7, 7, 64)</span></span><br><span class="line"></span><br><span class="line">    model.add(Flatten())  <span class="comment"># 一维展开，无学习参数</span></span><br><span class="line"></span><br><span class="line">    model.add(Dense(<span class="number">256</span>, activation=<span class="string">&#x27;relu&#x27;</span>))</span><br><span class="line">    model.add(Dropout(<span class="number">0.25</span>)) <span class="comment"># 引入dropout防止过拟合,rate表示丢弃的比例</span></span><br><span class="line"></span><br><span class="line">    model.add(Dense(<span class="number">10</span>, activation=<span class="string">&#x27;softmax&#x27;</span>))</span><br><span class="line"></span><br><span class="line">    model.<span class="built_in">compile</span>(optimizer=Adam(lr=<span class="number">1e-4</span>), loss=<span class="string">&#x27;categorical_crossentropy&#x27;</span>, metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(model.summary())</span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/01/08/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CCNN/">https://niiickz.github.io/2022/01/08/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CCNN/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/01/08/GAN%E5%AE%9E%E7%8E%B0%E9%80%9A%E7%94%A8%E5%9B%BE%E5%83%8F%E9%97%B4%E8%BD%AC%E6%8D%A2%20%E2%80%94%E2%80%94Pix2Pix%E8%AF%A6%E8%A7%A3/" title="GAN实现通用图像间转换 ——Pix2Pix详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">GAN实现通用图像间转换 ——Pix2Pix详解</div></div></a></div><div class="next-post pull-right"><a href="/2022/01/06/%E4%BA%A4%E5%8F%89%E7%86%B5CrossEntropy%E8%AF%A6%E8%A7%A3/" title="交叉熵CrossEntropy详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">交叉熵CrossEntropy详解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E8%A6%81CNN"><span class="toc-number">1.</span> <span class="toc-text">什么要CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E8%BF%90%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">卷积运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82%E4%B8%8E%E6%BB%A4%E6%B3%A2"><span class="toc-number">2.1.</span> <span class="toc-text">卷积层与滤波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E5%B9%85%E4%B8%8E%E5%A1%AB%E5%85%85"><span class="toc-number">2.2.</span> <span class="toc-text">步幅与填充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%BB%B4%E5%9B%BE%E5%83%8F%E7%9A%84%E5%8D%B7%E7%A7%AF"><span class="toc-number">2.3.</span> <span class="toc-text">三维图像的卷积</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E9%87%87%E6%A0%B7%E4%B8%8E%E6%B1%A0%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">下采样与池化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A9%BA%E6%B4%9E%E5%8D%B7%E7%A7%AF"><span class="toc-number">4.</span> <span class="toc-text">空洞卷积</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E9%87%87%E6%A0%B7"><span class="toc-number">5.</span> <span class="toc-text">上采样</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pytorch%E4%BD%BF%E7%94%A8CNN%E8%BF%9B%E8%A1%8CMnist%E5%88%86%E7%B1%BB"><span class="toc-number">6.</span> <span class="toc-text">Pytorch使用CNN进行Mnist分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Keras%E4%BD%BF%E7%94%A8CNN%E8%BF%9B%E8%A1%8CMnist%E5%88%86%E7%B1%BB"><span class="toc-number">7.</span> <span class="toc-text">Keras使用CNN进行Mnist分类</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

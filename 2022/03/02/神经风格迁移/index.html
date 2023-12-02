@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>神经风格迁移 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是神经风格迁移图像风格迁移一直是cv领域的一个难题传统图像处理中有很多针对该问题的非参数化算法，这些算法的局限都在于只能提取图像的低层特征 2015年Gatys等人提出了基于神经网络的图像风格迁移算法，即神经风格迁移神经风格迁移使用预训练的深度CNN提取图像高层特征，独立构造出了图像的内容&#x2F;风格表示该算法表现十分优异，使得图像风格迁移在神经网络研究中流行起来 论文链接： A neural al">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经风格迁移">
+<meta property="og:url" content="https://niiickz.github.io/2022/03/02/%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是神经风格迁移图像风格迁移一直是cv领域的一个难题传统图像处理中有很多针对该问题的非参数化算法，这些算法的局限都在于只能提取图像的低层特征 2015年Gatys等人提出了基于神经网络的图像风格迁移算法，即神经风格迁移神经风格迁移使用预训练的深度CNN提取图像高层特征，独立构造出了图像的内容&#x2F;风格表示该算法表现十分优异，使得图像风格迁移在神经网络研究中流行起来 论文链接： A neural al">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-03-02T13:04:34.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:43:28.707Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/03/02/%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '神经风格迁移',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:43:28'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">神经风格迁移</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-03-02T13:04:34.000Z" title="Created 2022-03-02 21:04:34">2022-03-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:43:28.707Z" title="Updated 2023-12-02 21:43:28">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="神经风格迁移"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="什么是神经风格迁移"><a href="#什么是神经风格迁移" class="headerlink" title="什么是神经风格迁移"></a>什么是神经风格迁移</h2><p>图像风格迁移一直是cv领域的一个难题<br>传统图像处理中有很多针对该问题的<strong>非参数化</strong>算法，这些算法的局限都在于只能提取图像的低层特征</p>
+<p>2015年Gatys等人提出了基于神经网络的图像风格迁移算法，即神经风格迁移<br>神经风格迁移使用<strong>预训练的深度CNN</strong>提取图像<strong>高层特征</strong>，<strong>独立</strong>构造出了图像的内容/风格表示<br>该算法表现十分优异，使得图像风格迁移在神经网络研究中流行起来</p>
+<p><strong>论文链接：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1508.06576.pdf">A neural algorithm of artistic style</a></p>
+<p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf">Image Style Transfer Using Convolutional Neural Networks</a></p>
+<p>自己训练的模型效果如下</p>
+<p><img src="D:\code\cloud\blog\img\neuralstyletransfer.png" alt="neuralStyleTransfer"></p>
+<h2 id="内容与风格的提取"><a href="#内容与风格的提取" class="headerlink" title="内容与风格的提取"></a>内容与风格的提取</h2><h3 id="深度内容表达"><a href="#深度内容表达" class="headerlink" title="深度内容表达"></a>深度内容表达</h3><p>以VGG为例，为了将深度CNN模型每一层学得的特征可视化<br>我么可以将一张<strong>随机噪声图</strong>和一张正常照片同时输入网络，计算网络第l层输出的两张特征图之间的loss，再<strong>对噪声图进行梯度下降</strong></p>
+<p>即设$\vec{p},\vec{x}$分别为输入的原图和噪声图，$P^l,F^l$分别为他们在网络第$l$层的输出特征图，其尺寸为$(H_l,W_l,C_l)$，则有square-error</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{\mathrm{content}}(\vec{p},\vec{x},l)=\frac{1}{2}\sum_{i,j,k}(F^l_{i,j,k}-P^l_{i,j,k})^2</script><p>对$F^l$求导有</p>
+<script type="math/tex; mode=display">
+\frac{\partial{\mathcal{L}_{\mathrm{content}}(\vec{p},\vec{x},l)}}{\partial{F^l_{i,j,k}}}=\begin{cases} 
+(F^l-P^l)_{i,j,k} & ,F^l_{i,j,k}>0\\
+0 & ,F^l_{i,j,k}<0
+\end{cases}</script><p>之后即可通过反向传播对$\vec{x}$进行梯度下降</p>
+<p>使用该方法对VGG不同层学得的特征可视化的结果如图中<strong>下侧</strong>所示</p>
+<p><img src="D:\code\cloud\blog\img\neuralStyleTransfer2.png" alt="neuralStyleTransfer2"></p>
+<p>从图中可知网络<strong>越高层</strong>学得的表达对图像<strong>内容（content）</strong>越敏感，即捕获了输入图像中的物体以及它们的布局等，而并不限制每个像素的色值</p>
+<p>因此我们将CNN网络<strong>高层的输出特征图</strong>称为图像的<strong>内容表达（content representation）</strong></p>
+<h3 id="深度风格表达"><a href="#深度风格表达" class="headerlink" title="深度风格表达"></a>深度风格表达</h3><p>与内容表达不同，图像的风格表达通过计算<strong>网络不同层的特征图以及特征图不同通道的相关性</strong>得到，而这种相关性通过<strong>gram矩阵</strong>获得</p>
+<p>设网络第$l$层输出的特征图尺寸为$(H_l,W_l,C_l)$，则gram矩阵$G^l\in \mathbb{R}^{C_l\times C_l}$，计算公式为</p>
+<script type="math/tex; mode=display">
+G^l_{i,j}=\frac{1}{H_lW_lC_l}\sum_{h=1}^{H_l}\sum_{w=1}^{W_l} F^l_{h,w,i}F^l_{h,w,j}</script><p>也即$G^l_{i,j}$为特征图通道$i$和通道$j$的<strong>内积</strong></p>
+<p>实际中操作中可以先将$F^l$转置，将通道维度提前，再将后两维展平，使其尺寸为$(C_l,H_lW_l)$，记为$F^{l’}$，则$G^l=F^{l’}F^{l’^T}$</p>
+<p>同样通过<strong>对噪声图进行梯度下降</strong>可以将VGG每层学得的风格表达可视化</p>
+<p>即设$\vec{a},\vec{x}$分别为输入的原图和噪声图，$A^l,G^l$分别为他们在网络第$l$层的gram矩阵，则有mean-squared损失</p>
+<script type="math/tex; mode=display">
+E_l=\frac{1}{4H_l^2W_l^2C_l^2}\sum_{i,j}(G^l_{i,j}-A^l_{i,j})^2</script><p>由于风格损失还应考虑不同层的输出特征图的相关性，所以最终风格损失为</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{\mathrm{style}}(\vec{a},\vec{x})=\sum_{l}w_lE_l</script><p>其中$w_l$为对应第$l$层风格损失的权重</p>
+<p>包含不同层的风格损失的可视化结果如上图中<strong>上侧</strong>所示，从左至右依次包含 (a)conv1_1 (b)conv1_1 conv2_1 (c)conv1_1 conv2_1 conv3_1 (d) conv1_1 conv2_1 conv3_1 conv4_1<br>(e) conv1_1 conv2_1 conv3_1 conv4_1 conv5_1 </p>
+<p>可以发现<strong>包含的不同层次越多，风格损失的效果就更好</strong></p>
+<h2 id="实现风格迁移"><a href="#实现风格迁移" class="headerlink" title="实现风格迁移"></a>实现风格迁移</h2><p>根据上述理论，可以通过<strong>同时最小化定义在某一层上的内容损失和定义在多层上的风格损失</strong>，并<strong>对一张噪声图进行梯度下降</strong>实现神经风格迁移</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{\mathrm{total}}(\vec{p},\vec{a},\vec{x})=\alpha \mathcal{L}_{\mathrm{content}}(\vec{p},\vec{x})+\beta \mathcal{L}_{\mathrm{style}}(\vec{a},\vec{x})</script><p><img src="D:\code\cloud\blog\img\neuralStyleTransfer3.png" alt="neuralStyleTransfer3"></p>
+<p>以下为代码实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot; Neural Style Transfer</span></span><br><span class="line"><span class="string">    paper: A neural algorithm of artistic style</span></span><br><span class="line"><span class="string">    see: https://arxiv.org/pdf/1508.06576.pdf</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    paper: Image Style Transfer Using Convolutional Neural Networks</span></span><br><span class="line"><span class="string">    see: https://openaccess.thecvf.com/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Implementation reference: https://keras.io/examples/generative/neural_style_transfer/</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.optimizers <span class="keyword">import</span> RMSprop</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.applications <span class="keyword">import</span> vgg19</span><br><span class="line"><span class="keyword">import</span> tensorflow.keras.backend <span class="keyword">as</span> K</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gram_matrix</span>(<span class="params">x</span>):</span><br><span class="line">    x = K.permute_dimensions(x, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">    x = K.reshape(x, (K.shape(x)[<span class="number">0</span>], -<span class="number">1</span>))</span><br><span class="line">    gram = K.dot(x, K.transpose(x))</span><br><span class="line">    <span class="keyword">return</span> gram</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">style_loss</span>(<span class="params">style, combination</span>):</span><br><span class="line">    gram_style = gram_matrix(style)</span><br><span class="line">    gram_combination = gram_matrix(combination)</span><br><span class="line"></span><br><span class="line">    h, w, c = style.get_shape().as_list()</span><br><span class="line">    fac = <span class="number">4.0</span> * ((h * w) ** <span class="number">2</span>) * (c ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> K.<span class="built_in">sum</span>(K.square(gram_style - gram_combination)) / fac</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">content_loss</span>(<span class="params">content, combination</span>):</span><br><span class="line">    <span class="keyword">return</span> K.<span class="built_in">sum</span>(K.square(content - combination)) / <span class="number">2.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calc_loss</span>(<span class="params">outputs</span>):</span><br><span class="line">    content_weight = <span class="number">2e-4</span></span><br><span class="line">    style_weight = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    content_layer_name = <span class="string">&#x27;block5_conv2&#x27;</span></span><br><span class="line">    style_layer_names = [</span><br><span class="line">        <span class="string">&quot;block1_conv1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;block2_conv1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;block3_conv1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;block4_conv1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;block5_conv1&quot;</span>,</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    loss = K.variable(<span class="number">0.</span>)</span><br><span class="line"></span><br><span class="line">    features = outputs[content_layer_name]</span><br><span class="line">    loss = loss + content_weight * content_loss(features[<span class="number">0</span>, :, :, :], features[<span class="number">2</span>, :, :, :])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> layer_name <span class="keyword">in</span> style_layer_names:</span><br><span class="line">        features = outputs[layer_name]</span><br><span class="line">        sloss = style_loss(features[<span class="number">1</span>, :, :, :], features[<span class="number">2</span>, :, :, :])</span><br><span class="line"></span><br><span class="line">        loss = loss + style_weight / <span class="built_in">len</span>(style_layer_names) * sloss</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">preprocessImage</span>(<span class="params">fpath, shape</span>):</span><br><span class="line">    img = cv2.imread(fpath, <span class="number">1</span>)</span><br><span class="line">    img = cv2.resize(img, shape)</span><br><span class="line"></span><br><span class="line">    img = np.expand_dims(img, axis=<span class="number">0</span>).astype(np.float32)</span><br><span class="line">    img = img / <span class="number">127.5</span> - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">saveImage</span>(<span class="params">img, fpath</span>):</span><br><span class="line">    img = (img + <span class="number">1</span>) * <span class="number">127.5</span></span><br><span class="line">    img = np.clip(img, <span class="number">0</span>, <span class="number">255</span>).astype(<span class="string">&quot;uint8&quot;</span>)</span><br><span class="line">    cv2.imwrite(fpath, img)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getFeatureExtractor</span>():</span><br><span class="line">    vgg = vgg19.VGG19(include_top=<span class="literal">False</span>, weights=<span class="string">&#x27;imagenet&#x27;</span>)</span><br><span class="line">    outputs_dict = <span class="built_in">dict</span>([(layer.name, layer.output) <span class="keyword">for</span> layer <span class="keyword">in</span> vgg.layers])</span><br><span class="line">    <span class="keyword">return</span> Model(vgg.inputs, outputs_dict)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">img_content, img_style, img_combination</span>):</span><br><span class="line">    extractor = getFeatureExtractor()</span><br><span class="line">    optimizer = RMSprop()</span><br><span class="line"></span><br><span class="line">    epochs = <span class="number">8000</span></span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, epochs + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:</span><br><span class="line">            inputs = K.concatenate([img_content, img_style, img_combination], axis=<span class="number">0</span>)</span><br><span class="line">            outputs = extractor(inputs)</span><br><span class="line">            loss = calc_loss(outputs)</span><br><span class="line"></span><br><span class="line">        grad = tape.gradient(loss, img_combination)</span><br><span class="line"></span><br><span class="line">        optimizer.apply_gradients([(grad, img_combination)])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> step % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;epoch &#123;&#125;: loss=&#123;:.4f&#125;&quot;</span>.<span class="built_in">format</span>(step, loss))</span><br><span class="line">            saveImage(img_combination.numpy()[<span class="number">0</span>], <span class="string">&#x27;./epoch&#123;&#125;.png&#x27;</span>.<span class="built_in">format</span>(step))</span><br><span class="line"></span><br><span class="line">fpath_content = <span class="string">&#x27;../input/styletransfer/content.jpg&#x27;</span></span><br><span class="line">fpath_style = <span class="string">&#x27;../input/styletransfer/style.jpg&#x27;</span></span><br><span class="line"></span><br><span class="line">h, w = cv2.imread(fpath_content, <span class="number">0</span>).shape</span><br><span class="line">shape = (w, h)</span><br><span class="line"></span><br><span class="line">img_content = K.variable(preprocessImage(fpath_content, shape))</span><br><span class="line">img_style = K.variable(preprocessImage(fpath_style, shape))</span><br><span class="line">img_combination = K.variable(preprocessImage(fpath_content, shape))</span><br><span class="line"></span><br><span class="line">train(img_content, img_style, img_combination)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/03/02/%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/">https://niiickz.github.io/2022/03/02/%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/08/07/Perceptual%20Loss/" title="Perceptual Loss"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Perceptual Loss</div></div></a></div><div class="next-post pull-right"><a href="/2022/02/20/SpeechTransformer/" title="SpeechTransformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">SpeechTransformer</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB"><span class="toc-number">1.</span> <span class="toc-text">什么是神经风格迁移</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9%E4%B8%8E%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%8F%90%E5%8F%96"><span class="toc-number">2.</span> <span class="toc-text">内容与风格的提取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%86%85%E5%AE%B9%E8%A1%A8%E8%BE%BE"><span class="toc-number">2.1.</span> <span class="toc-text">深度内容表达</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E9%A3%8E%E6%A0%BC%E8%A1%A8%E8%BE%BE"><span class="toc-number">2.2.</span> <span class="toc-text">深度风格表达</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB"><span class="toc-number">3.</span> <span class="toc-text">实现风格迁移</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

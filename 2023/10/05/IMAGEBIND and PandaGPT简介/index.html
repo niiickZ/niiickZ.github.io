@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>IMAGEBIND and PandaGPT简介 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="IMAGEBINDGirdhar R, El-Nouby A, Liu Z, et al. Imagebind: One embedding space to bind them all[C]&#x2F;&#x2F;Proceedings of the IEEE&#x2F;CVF Conference on Computer Vision and Pattern Recognition. 2023: 15180-15190.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IMAGEBIND and PandaGPT简介">
+<meta property="og:url" content="https://niiickz.github.io/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="IMAGEBINDGirdhar R, El-Nouby A, Liu Z, et al. Imagebind: One embedding space to bind them all[C]&#x2F;&#x2F;Proceedings of the IEEE&#x2F;CVF Conference on Computer Vision and Pattern Recognition. 2023: 15180-15190.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-10-05T08:15:47.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.197Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'IMAGEBIND and PandaGPT简介',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">IMAGEBIND and PandaGPT简介</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.197Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="IMAGEBIND and PandaGPT简介"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="IMAGEBIND"><a href="#IMAGEBIND" class="headerlink" title="IMAGEBIND"></a>IMAGEBIND</h2><p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/CVPR2023/html/Girdhar_ImageBind_One_Embedding_Space_To_Bind_Them_All_CVPR_2023_paper.html">Girdhar R, El-Nouby A, Liu Z, et al. Imagebind: One embedding space to bind them all[C]//Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2023: 15180-15190.</a></p>
+<p>先前的多模态对齐研究主要关注单个模态对的对齐，例如 (image, text), (video, audio), (audio, text)等，其嵌入空间局限于训练所用的模态对，例如(video, audio)嵌入不能直接用于text-based任务</p>
+<p>学习真正的多模态联合嵌入空间的主要难点是缺少所有模态同时出现的高质量数据集</p>
+<p>直觉上，图像可以自然地与许多模态绑定(bind)，因此该论文的动机是利用多种image-paired数据，将各种模态嵌入分别与图像嵌入对齐，从而绕开缺少模态对齐数据的限制，学得一个联合嵌入空间</p>
+<p><img src="G:\code\cloud\blog\img\IMAGEBIND.png" alt="IMAGEBIND"></p>
+<p>论文利用了已有的大规模image-text pair数据，并收集了4种与image/video自然成对的“自监督”数据——audio, depth, thermal, IMU</p>
+<p>通过将5种modality embedding分别与image embedding对齐，实现这些模态之间的相互对齐</p>
+<p>记image-paired模态对为$(I,M)$，$I_i,M_i$的嵌入分别为$q_i=f(I_i),k_i=g(M_i)$，训练方法就是简单的对比损失</p>
+<script type="math/tex; mode=display">
+L_{\mathcal{I},\mathcal{M}}=-\log\frac{\exp(\mathbf{q}_i^\intercal\mathbf{k}_i/\tau)}{\exp(\mathbf{q}_i^\intercal\mathbf{k}_i/\tau)+\sum_{j\neq i}\exp(\mathbf{q}_i^\intercal\mathbf{k}_j/\tau)}</script><p>实际中使用其对称版本$L=L<em>{I,M}+L</em>{M,I}$</p>
+<p>虽然训练只使用了$(I,M_1)$和$(I,M_2)$，但zero-shot实验中可以观察到$(M_1,M_2)$的对齐</p>
+<p>以下是一些模型细节</p>
+<p>text encoder使用CLIP</p>
+<p>image/video encoder使用同一个ViT，视频从2s中采样2帧，ViT的投影层使用类似I3D的时序膨胀(temporal inflation)</p>
+<p>audio encoder也使用ViT (patch 16, stride 10)，16kHz采样的2s音频，处理为128 mel频谱</p>
+<p>thermal/depth image视为单通道图，使用ViT编码</p>
+<p>IMU encoder使用Transformer，使用5s IMU片段采样2k timestep，通过1D卷积预投影</p>
+<h2 id="PandaGPT"><a href="#PandaGPT" class="headerlink" title="PandaGPT"></a>PandaGPT</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.16355">Su Y, Lan T, Li H, et al. Pandagpt: One model to instruction-follow them all[J]. arXiv preprint arXiv:2305.16355, 2023.</a></p>
+<p>IMAGEBIND实现的只是多模态联合嵌入的学习，PandaGPT的目的是利用IMAGEBIND实现6种模态的instruction-following task</p>
+<p>其思想很简单，在ImageBind和LM (Vicuna) 之间加入一个投影层，并利用LoRA加入微调权值，训练任务就是语言建模</p>
+<p><img src="G:\code\cloud\blog\img\pandaGPT.png" alt="pandaGPT"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/">https://niiickz.github.io/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Flamingo论文解读</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IMAGEBIND"><span class="toc-number">1.</span> <span class="toc-text">IMAGEBIND</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PandaGPT"><span class="toc-number">2.</span> <span class="toc-text">PandaGPT</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

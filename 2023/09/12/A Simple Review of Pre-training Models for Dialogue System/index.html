@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>A Simple Review of Pre-training Models for Dialogue System | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Large-scale transfer learning for natural language generationGolovanov S, Kurbanov R, Nikolenko S, et al. Large-scale transfer learning for natural language generation[C]&#x2F;&#x2F;Proceedings of the 57th Annu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Simple Review of Pre-training Models for Dialogue System">
+<meta property="og:url" content="https://niiickz.github.io/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Large-scale transfer learning for natural language generationGolovanov S, Kurbanov R, Nikolenko S, et al. Large-scale transfer learning for natural language generation[C]&#x2F;&#x2F;Proceedings of the 57th Annu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-09-12T11:03:13.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.175Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'A Simple Review of Pre-training Models for Dialogue System',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">A Simple Review of Pre-training Models for Dialogue System</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-09-12T11:03:13.000Z" title="Created 2023-09-12 19:03:13">2023-09-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.175Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="A Simple Review of Pre-training Models for Dialogue System"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="Large-scale-transfer-learning-for-natural-language-generation"><a href="#Large-scale-transfer-learning-for-natural-language-generation" class="headerlink" title="Large-scale transfer learning for natural language generation"></a>Large-scale transfer learning for natural language generation</h3><p><a target="_blank" rel="noopener" href="https://aclanthology.org/P19-1608/">Golovanov S, Kurbanov R, Nikolenko S, et al. Large-scale transfer learning for natural language generation[C]//Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics. 2019: 6053-6058.</a></p>
+<p>这是一篇将预训练模型应用到NLG任务的较早研究，主要探索了如何使<strong>单输入预训练模型</strong>适用于下游<strong>多输入生成任务</strong></p>
+<p>以对话系统为例，其输入包括：知识库中的知识、对话历史和已生成的输出token序列</p>
+<p>文章提出了两种基本方案</p>
+<ul>
+<li><strong>single-input model</strong></li>
+</ul>
+<p>不改变预训练模型结构，仅将输入进行拼接作为前缀，预训练模型的目标使对其进行续写</p>
+<p>为了区分该前缀中的异构上下文(heterogeneous contexts)，文章列出了几种方法：</p>
+<p>(1) 使用自然分隔符（例如双引号）对不同context的输入进行分隔</p>
+<p>(2) 使用空间分隔符进行分隔</p>
+<p>(3) 将context-type embeddings与原始token embedding进行融合</p>
+<ul>
+<li><strong>multi-input model</strong></li>
+</ul>
+<p>对预训练模型进行复制形成encoder-decoder结构</p>
+<p>与single-input model类似，encoder的输入是加入了类型embedding的拼接上下文，而已生成的输出token序列则作为decoder的输入</p>
+<p>此外，decoder中的multi-head attention被复制成三份，分别处理知识嵌入、对话历史嵌入和已生成输出的嵌入</p>
+<p><img src="G:\code\cloud\blog\img\Large-scale transfer learning for NLG.png" alt="Large-scale transfer learning for NLG"></p>
+<p>实验中，在BLEU、NIST-4等标准下multi-input model均表现更优秀</p>
+<p>此外，single-input model更倾向于生成历史中已有的单词，且multi-input model在利用知识上也更加优秀</p>
+<hr>
+<h3 id="Dialogpt-Large-scale-generative-pre-training-for-conversational-response-generation"><a href="#Dialogpt-Large-scale-generative-pre-training-for-conversational-response-generation" class="headerlink" title="Dialogpt: Large-scale generative pre-training for conversational response generation"></a>Dialogpt: Large-scale generative pre-training for conversational response generation</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.00536">Zhang Y, Sun S, Galley M, et al. Dialogpt: Large-scale generative pre-training for conversational response generation[J]. arXiv preprint arXiv:1911.00536, 2019..</a></p>
+<p>这篇文章是将GPT-2直接应用于open domain dialogue system的早期尝试</p>
+<p>DialogueGPT直接基于GPT-2进行fine-tuning，其输入就是对话历史和目标响应的拼接</p>
+<p>为了使生成的响应更丰富，DialogueGPT还加入了了最大互信息(maximum mutual information, MMI)分数</p>
+<p>MMI使用一个<strong>预训练反向模型</strong>，通过给定的输出响应预测其输入，即预测$P(source|target)$</p>
+<p>具体的，DialogueGPT选择k个概率最大的输出，并根据反向模型预测的概率重新排列其顺序</p>
+<p>此外，文章还尝试了强化学习方法，即使用$P(source|target)$作为reward进行policy gradient，但实验表明该方法会陷入局部最优</p>
+<p>总的来说这篇文章没有用什么比较新的方法，只是对预训练模型在dialogue system上的应用做了实验探索</p>
+<hr>
+<h3 id="Knowledge-grounded-dialogue-generation-with-pre-trained-language-models"><a href="#Knowledge-grounded-dialogue-generation-with-pre-trained-language-models" class="headerlink" title="Knowledge-grounded dialogue generation with pre-trained language models"></a>Knowledge-grounded dialogue generation with pre-trained language models</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.08824">Zhao X, Wu W, Xu C, Tao C, Zhao D, Yan R (2020b) Knowledge-grounded dialogue generation with pre-trained language models. arXiv preprint arXiv:201008824</a></p>
+<p>这篇文章提出了一种将<strong>基于预训练模型</strong>和<strong>基于知识</strong>的对话生成相结合的模型</p>
+<p>对于外部知识我们主要考虑<strong>非结构化</strong>文档，例如wiki等</p>
+<p>预训练语言模型通常会限制最大的可处理token数，因此直接将非结构化文档作为输入并不现实</p>
+<p>文章提出的做法是在预训练模型前添加一个<strong>知识选择模块</strong></p>
+<p>假设知识文档为$D={d_1,\cdots,d_m}$，知识选择模块将知识选择视为<strong>序列预测任务</strong>，即从空集开始，使用LSTM每个timestep预测一个相关知识$d_i$加入集合，直到生成一个特定的终止符</p>
+<p>为了充分理解对话历史和知识之间的关系，令完整的对话历史${u<em>k}</em>{i=k}^n$与各个不同的知识$d_i$进行拼接，记为$s_i$，每个$s_i$经过预训练BERT处理得到$e_i=CLS(BERT(s_i))$，即构成了LSTM的输入$E=(e_1,\cdots,e_m)$</p>
+<p>知识选择后，使用预训练模型进行对话生成的方法就是简单的拼接以及embedding融合</p>
+<p>现在要考虑的是在目标指示未知的情况下如何训练知识选择模块</p>
+<p>由于目标响应$r$是由相关知识产生的，因此我们可以利用其生成<strong>伪ground truth</strong></p>
+<p>具体来说，将知识选择模块选择的知识按$Sim(d<em>i,r)$排序，然后取其子集$\bar D={d</em>{j<em>1},\ldots,d</em>{j\bar m}},\bar m=\operatorname{argmax}<em>t(\operatorname{Sim}(d</em>{j_{1:t}},r))$作为伪ground truth，并利用其进行<strong>强化学习</strong>和<strong>课程学习</strong></p>
+<p><img src="G:\code\cloud\blog\img\Knowledge-grounded dialogue generation with pre-trained language models.png" alt="Knowledge-grounded dialogue generation with pre-trained language models"></p>
+<hr>
+<h3 id="Plato-Pre-trained-dialogue-generation-model-with-discrete-latent-variable"><a href="#Plato-Pre-trained-dialogue-generation-model-with-discrete-latent-variable" class="headerlink" title="Plato: Pre-trained dialogue generation model with discrete latent variable"></a>Plato: Pre-trained dialogue generation model with discrete latent variable</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1910.07931">Bao S, He H, Wang F, Wu H, Wang H (2019b) Plato: Pre-trained dialogue generation model with discrete latent variable. arXiv preprint arXiv:191007931</a></p>
+<p>这篇文章的motivation是解决BERT在小型对话数据集上微调时表现不足的问题</p>
+<p>文章认为造成上述问题的原因是：(1) 对话的语言模式与与训练使用的通用文本存在很大差距； (2) 单向文本生成与BERT的双向预训练模式不同； (2) 对话生成存在一对多关系，即同一context可对应多个合适的回复</p>
+<p>针对(1)，文章进一步使用了Reddit和Twitter收集的对话进行预训练</p>
+<p>针对(2)，文章使用了Unified language model pre-training for natural language understanding and generation. arXiv preprint中提出的结构</p>
+<p>针对(3)，文章使用了一个k路离散隐变量建模一对多关系</p>
+<p>PLATO使用同一个预训练BERT同时进行隐变量$z$的预测和响应$r$的生成</p>
+<p>响应生成使用$(z,c,r)$的拼接作为输入，其中$c$为上下文（对话历史、知识等），$z,c$的部分使用双向attention，$r$的部分只使用前向attention，损失函数同时使用NLL loss和BOW loss</p>
+<p>隐变量预测使用$([M],c,r)$的拼接作为输入，其中$[M]$为特殊token，attention均为双向，输出为$z=CLS(BERT([M]))$</p>
+<p>由于$z$是无监督的，因此loss通过分类实现，即选择正负对$(c,r^+),(c,r^-)$，通过$CLS(BERT([M]))$进行二分类，于是有二值交叉熵$L_{RS}=-\log p(l_r=1|c,r^+)-\log p(l_r=0|c,r^-)$</p>
+<p>一次迭代的损失就是$L=L<em>{NLL}+L</em>{BOW}+L_{RS}$</p>
+<p>此外BERT的输入使用了三种额外的embedding：(1) Role Embedding，输出响应对应的说话人为$E_A$，其余均为$E_B$；(2)  Turn Embedding，用于区分utterance顺序，输出相应对应$E_0$，向前以此为-1，-2，…；(3) Position Embedding，不用解释</p>
+<p>推理阶段，先产生k路离散隐变量$z$，使用其产生$k$个回复$r$，并选择概率$p(l_r=1|c,r)$最大的一个</p>
+<p><img src="G:\code\cloud\blog\img\PLATO.png" alt="PLATO"></p>
+<hr>
+<h3 id="Incremental-transformer-with-deliberation-decoder-for-document-grounded-conversations"><a href="#Incremental-transformer-with-deliberation-decoder-for-document-grounded-conversations" class="headerlink" title="Incremental transformer with deliberation decoder for document grounded conversations"></a>Incremental transformer with deliberation decoder for document grounded conversations</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1907.08854">Li Z, Niu C, Meng F, et al. Incremental transformer with deliberation decoder for document grounded conversations[J]. arXiv preprint arXiv:1907.08854, 2019.</a></p>
+<p>这篇不是预训练的dialogue system，但是是基于文档知识的dialogue system比较典型的transformer结构</p>
+<p>模型结构看图就能大概理解，想深入阅读就直接看论文吧</p>
+<p><img src="G:\code\cloud\blog\img\Incremental Transformer with Deliberation Decoder.png" alt="Incremental Transformer with Deliberation Decoder"></p>
+<p><img src="G:\code\cloud\blog\img\Incremental Transformer with Deliberation Decoder2.png" alt="Incremental Transformer with Deliberation Decoder2"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/">https://niiickz.github.io/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/23/BLIP%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">BLIP论文解读</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/06/Spectral-based%20ConvGNN%E5%9F%BA%E7%A1%80/" title="Spectral-based ConvGNN基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Spectral-based ConvGNN基础</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div><div><a href="/2023/08/02/ChebNet%20and%20GCN/" title="ChebNet and GCN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-02</div><div class="title">ChebNet and GCN</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Large-scale-transfer-learning-for-natural-language-generation"><span class="toc-number">1.</span> <span class="toc-text">Large-scale transfer learning for natural language generation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dialogpt-Large-scale-generative-pre-training-for-conversational-response-generation"><span class="toc-number">2.</span> <span class="toc-text">Dialogpt: Large-scale generative pre-training for conversational response generation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Knowledge-grounded-dialogue-generation-with-pre-trained-language-models"><span class="toc-number">3.</span> <span class="toc-text">Knowledge-grounded dialogue generation with pre-trained language models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Plato-Pre-trained-dialogue-generation-model-with-discrete-latent-variable"><span class="toc-number">4.</span> <span class="toc-text">Plato: Pre-trained dialogue generation model with discrete latent variable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Incremental-transformer-with-deliberation-decoder-for-document-grounded-conversations"><span class="toc-number">5.</span> <span class="toc-text">Incremental transformer with deliberation decoder for document grounded conversations</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

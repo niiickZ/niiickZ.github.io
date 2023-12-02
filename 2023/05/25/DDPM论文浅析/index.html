@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>DDPM论文浅析 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="论文链接：Denoising Diffusion Probabilistic Models 这篇论文的贡献主要有两个  证明扩散模型确实有能力生成高质量样本 证明扩散模型的一种特定参数化方法与降噪分数匹配(denoising score matching)等价  一些主要前置知识： 变分推理（Variational Inference） 扩散模型：Deep Unsupervised Learnin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDPM论文浅析">
+<meta property="og:url" content="https://niiickz.github.io/2023/05/25/DDPM%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="论文链接：Denoising Diffusion Probabilistic Models 这篇论文的贡献主要有两个  证明扩散模型确实有能力生成高质量样本 证明扩散模型的一种特定参数化方法与降噪分数匹配(denoising score matching)等价  一些主要前置知识： 变分推理（Variational Inference） 扩散模型：Deep Unsupervised Learnin">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-25T08:42:02.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.185Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/05/25/DDPM%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'DDPM论文浅析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">DDPM论文浅析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-05-25T08:42:02.000Z" title="Created 2023-05-25 16:42:02">2023-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.185Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="DDPM论文浅析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>论文链接：<a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2020/file/4c5bcfec8584af0d967f1ab10179ca4b-Paper.pdf">Denoising Diffusion Probabilistic Models</a></p>
+<p>这篇论文的贡献主要有两个</p>
+<ol>
+<li>证明扩散模型确实有能力生成高质量样本</li>
+<li>证明扩散模型的一种特定参数化方法与降噪分数匹配(denoising score matching)等价</li>
+</ol>
+<p>一些主要前置知识：</p>
+<p>变分推理（Variational Inference）</p>
+<p>扩散模型：<a target="_blank" rel="noopener" href="http://proceedings.mlr.press/v37/sohl-dickstein15.pdf">Deep Unsupervised Learning using Nonequilibrium Thermodynamics</a></p>
+<p>Score Matching：<a target="_blank" rel="noopener" href="https://www.jmlr.org/papers/volume6/hyvarinen05a/hyvarinen05a.pdf">Estimation of Non-Normalized Statistical Models by Score Matching</a></p>
+<p>Score-based Generative Model：<a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2019/file/3001ef257407d5a371a96dcd947c7d93-Paper.pdf">Generative Modeling by Estimating Gradients of the Data Distribution</a></p>
+<h2 id="Diffusion-Model"><a href="#Diffusion-Model" class="headerlink" title="Diffusion Model"></a>Diffusion Model</h2><p>设$\mathbf{x}<em>{0}$为已知数据集中的样本，它来自分布$q(\mathbf{x}</em>{0})$</p>
+<p>设$\mathbf{x}_1,…,\mathbf{x}_T$是与$\mathbf{x}_0$维度相同的隐变量，它们通过一个<strong>固定的</strong>马尔可夫链采样得到</p>
+<p>该马尔可夫链定义为根据方差表$\beta_1,…,\beta_T$逐步向$x_0$中<strong>添加随机高斯噪声</strong>，称为<strong>前向过程(forward process)</strong>或<strong>扩散过程(diffusion process)</strong></p>
+<script type="math/tex; mode=display">
+q(\mathbf{x}_{t}|\mathbf x_{t-1}):=\mathcal{N}(\mathbf x_t;\sqrt{1-\beta_t}\mathbf x_{t-1},\beta_t\mathbf I)</script><p>前向过程的一个重要性质是<strong>可以解析地在任意timestep进行对$x$采样</strong>，令$\alpha<em>t=1-\beta_t$，$\overline{\alpha}_t=\prod</em>{s=1}^t\alpha_s$，则有</p>
+<script type="math/tex; mode=display">
+q(\mathbf x_t|\mathbf x_0)=\mathcal N(\mathbf x_t;\sqrt{\bar\alpha_t}\mathbf x_0,(1-\bar\alpha_t)\mathbf I)</script><hr>
+<p><strong>证明：</strong></p>
+<p>使用重参数化(reparameterize)技巧，设$\epsilon \sim \mathcal N(\mathbf 0,\mathbf I)$，则</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbf x_t 
+&= \sqrt{\alpha_t}\mathbf x_{t-1} + \sqrt{1-\alpha_t} \mathbf \epsilon_{t-1} \\
+&= \sqrt{\alpha_t}\left(\sqrt{\alpha_{t-1}}\mathbf x_{t-2} + \sqrt{1-\alpha_{t-1}} \mathbf \epsilon_{t-2}\right) + \sqrt{1-\alpha_t} \mathbf \epsilon_{t-1} \\
+&= \sqrt{\alpha_t \alpha_{t-1}} \mathbf x_{t-2} + \sqrt{\alpha_t-\alpha_t\alpha_{t-1}}\epsilon_{t-2} + \sqrt{1-\alpha_t} \mathbf \epsilon_{t-1}  \\
+&= \sqrt{\alpha_t \alpha_{t-1}}\mathbf x_{t-2} + \sqrt{(\alpha_t-\alpha_t\alpha_{t-1})+(1-\alpha_t)}\epsilon_{t-2}^*\\
+&= \sqrt{\alpha_t \alpha_{t-1}}\mathbf x_{t-2} + \sqrt{1-\alpha_t\alpha_{t-1}}\epsilon_{t-2}^*\\
+&= ...\\
+&= \sqrt{\bar\alpha_t}\mathbf x_0 + \sqrt{1-\bar\alpha_t}\epsilon_0 \\
+\end{aligned}</script><hr>
+<p>采样得到隐变量序列后，可以得到后验$q(\mathbf{x}_{1,T}|\mathbf{x}_0)$</p>
+<script type="math/tex; mode=display">
+q(\mathbf{x}_{1:T}|\mathbf{x}_0):=\prod\limits_{t=1}^{T}q(\mathbf{x}_t|\mathbf{x}_{t-1})</script><p>现在再定义另一个逆向马尔可夫链，其初始分布为$p_{\theta}(\mathbf{x}_T)=\mathcal{N}\left(\mathbf{x}_T;\mathbf{0},\mathbf{I}\right)$，转移概率是通过学习得到的高斯分布，称为<strong>逆过程(reverse process)</strong></p>
+<script type="math/tex; mode=display">
+p_{\theta}\left(\mathbf{x}_{t-1}|\mathbf{x}_{t}\right):=\mathcal{N}\left(\mathbf{x}_{t-1} ; \boldsymbol{\mu}_{\theta}\left(\mathbf{x}_{t}, t\right), \boldsymbol{\Sigma}_{\theta}\left(\mathbf{x}_{t}, t\right)\right)</script><p>进一步可得联合分布$p<em>{\theta}\left(\mathbf{x}</em>{0: T}\right)$</p>
+<script type="math/tex; mode=display">
+p_{\theta}\left(\mathbf{x}_{0: T}\right):=p\left(\mathbf{x}_{T}\right) \prod_{t=1}^{T} p_{\theta}\left(\mathbf{x}_{t-1} \mid \mathbf{x}_{t}\right)</script><p>扩散模型(Diffusion Models, DM)的思路是用$p<em>{\theta}(\mathbf x</em>{t-1}|\mathbf x<em>t)$来近似$q(\mathbf x</em>{t-1}|\mathbf x<em>{t})$，这样$p</em>{\theta}(\mathbf{x}<em>{0})=\int p</em>{\theta}\left(\mathbf{x}<em>{0: T}\right)d \mathbf{x}</em>{1: T}$就成为了真实分布$q(\mathbf{x}_{0})$的近似</p>
+<p>通俗的说，DM对样本不断加噪直到几乎只有高斯噪声，然后再学习加噪的逆过程，即从高斯噪声不断降噪直到获得一个样本</p>
+<p><img src="G:\code\cloud\blog\img\diffusion.png" alt="diffusion"></p>
+<p>$p<em>{\theta}(\mathbf{x}</em>{0})$的训练是通过<strong>优化变分下界</strong>进行的，即</p>
+<script type="math/tex; mode=display">
+\mathbb E_q\left[-\log p_{\theta}(\mathbf x_0)\right]
+\leq\mathbb E_q
+\left[
+-\log\frac{p_{\theta}(\mathbf x_{0:T})}{q(\mathbf x_{1:T}|\mathbf x_0)}
+\right]
+=\mathbb E_q
+\left[
+-\log p(\mathbf x_T)-\sum\limits_{t\geq1}\log\dfrac{p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)}{q(\mathbf x_{t}|\mathbf x_{t-1})}
+\right]=:L</script><p>直接计算这个式子需要MCMC采样，方差会比较大，因此将$L$进一步改写为</p>
+<script type="math/tex; mode=display">
+L=\mathbb{E}_{q}[\underbrace{D_{\mathrm{KL}}\left(q\left(\mathbf{x}_{T} \mid \mathbf{x}_{0}\right) \| p\left(\mathbf{x}_{T}\right)\right)}_{L_{T}}+\sum_{t>1} \underbrace{D_{\mathrm{KL}}\left(q\left(\mathbf{x}_{t-1} \mid \mathbf{x}_{t}, \mathbf{x}_{0}\right) \| p_{\theta}\left(\mathbf{x}_{t-1} \mid \mathbf{x}_{t}\right)\right)}_{L_{t-1}} \underbrace{-\log p_{\theta}\left(\mathbf{x}_{0} \mid \mathbf{x}_{1}\right)}_{L_{0}}]</script><hr>
+<p><strong>证明：</strong></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L=&\mathbb E_q
+\left[
+-\log p(\mathbf x_T)-\sum\limits_{t\geq1}\log\dfrac{p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)}{q(\mathbf x_{t}|\mathbf x_{t-1})}
+\right]\\
+=&\mathbb E_q
+\left[
+-\log p(\mathbf x_T)-\log\dfrac{p_{\theta}(\mathbf x_{0}|\mathbf x_1)}{q(\mathbf x_{1}|\mathbf x_{0})}-\sum\limits_{t>1}\log\dfrac{p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)}{q(\mathbf x_{t}|\mathbf x_{t-1})}
+\right]\\
+=&\mathbb E_q
+\left[
+-\log p(\mathbf x_T)-\log\dfrac{p_{\theta}(\mathbf x_{0}|\mathbf x_1)}{q(\mathbf x_{1}|\mathbf x_{0})}-\sum\limits_{t>1}\log\dfrac{p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)}{q(\mathbf x_{t-1}|\mathbf x_{t}, \mathbf x_{0})}\cdot \dfrac{q(\mathbf x_{t-1}|\mathbf x_{0})}{q(\mathbf x_{t}|\mathbf x_{0})}
+\right]\\
+=&\mathbb E_q
+\left[
+-\log p(\mathbf x_T)-\log\dfrac{p_{\theta}(\mathbf x_{0}|\mathbf x_1)}{q(\mathbf x_{1}|\mathbf x_{0})}-\log \dfrac{q(\mathbf x_{1}|\mathbf x_{0})}{q(\mathbf x_{T}|\mathbf x_{0})}-\sum\limits_{t>1}\log\dfrac{p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)}{q(\mathbf x_{t-1}|\mathbf x_{t}, \mathbf x_{0})}
+\right]\\
+=&\mathbb E_q
+\left[
+-\log \dfrac{p(\mathbf x_T)}{q(\mathbf x_{T}|\mathbf x_{0})}-\log p_{\theta}(\mathbf x_{0}|\mathbf x_1)-\sum\limits_{t>1}\log\dfrac{p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)}{q(\mathbf x_{t-1}|\mathbf x_{t}, \mathbf x_{0})}
+\right]\\
+=&\mathbb E_q
+\left[ D_{KL}(q(\mathbf x_{T}|\mathbf x_{0})\|p(\mathbf x_T))
++\sum\limits_{t>1}D_{KL}\left(q(\mathbf x_{t-1}|\mathbf x_{t}, \mathbf x_{0})\|p_{\theta}(\mathbf x_{t-1}|\mathbf x_t)\right)-\log p_{\theta}(\mathbf x_{0}|\mathbf x_1)
+\right]
+\end{aligned}</script><hr>
+<p>改写后的$L$含义更加明显了，最小化$L$其实就是最小化$D<em>{KL}(q(\mathbf x</em>{t-1}|\mathbf x<em>{t})|p</em>{\theta}(\mathbf x<em>{t-1}|\mathbf x_t))$，也即令$p</em>{\theta}(\mathbf x<em>{t-1}|\mathbf x_t)$和$q(\mathbf x</em>{t-1}|\mathbf x_{t})$尽可能相似</p>
+<p>$L<em>{t-1}$中$q(\mathbf{x}</em>{t-1}|\mathbf{x}<em>{t}, \mathbf{x}</em>{0})$根据贝叶斯公式可得</p>
+<script type="math/tex; mode=display">
+q\left(\mathbf{x}_{t-1}| \mathbf{x}_{t}, \mathbf{x}_{0}\right)
+=\mathcal{N}\left(\mathbf{x}_{t-1} ; \tilde{\boldsymbol{\mu}}_{t}\left(\mathbf{x}_{t}, \mathbf{x}_{0}\right), \tilde{\beta}_{t} \mathbf{I}\right)
+\\
+where  \quad \tilde{\boldsymbol{\mu}}_{t}\left(\mathbf{x}_{t}, \mathbf{x}_{0}\right):=\frac{\sqrt{\bar{\alpha}_{t-1}} \beta_{t}}{1-\bar{\alpha}_{t}} \mathbf{x}_{0}+\frac{\sqrt{\alpha_{t}}\left(1-\bar{\alpha}_{t-1}\right)}{1-\bar{\alpha}_{t}} \mathbf{x}_{t} \quad  and  \quad \tilde{\beta}_{t}:=\frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_{t}} \beta_{t}</script><p>正态分布间的KL散度是可以直接计算的，这样就避免了MCMC</p>
+<h2 id="Score-based-Model"><a href="#Score-based-Model" class="headerlink" title="Score-based Model"></a>Score-based Model</h2><p>Score Matching最初的目的是计算非归一化概率模型的归一化常量</p>
+<p>其论文中将<strong>Score Function</strong>定义为<strong>对数概率密度的梯度</strong>（the gradient of the log-density）</p>
+<script type="math/tex; mode=display">
+\boldsymbol{\psi}(\boldsymbol{\xi} ; \boldsymbol{\theta})=\left(\begin{array}{c}\frac{\partial \log p(\boldsymbol{\xi} ; \boldsymbol{\theta})}{\partial \xi_1} \\ \vdots \\ \frac{\partial \log p(\boldsymbol{\xi} ; \boldsymbol{\theta})}{\partial \xi_n}\end{array}\right)
+=\nabla_{\boldsymbol{\xi}} \log p(\boldsymbol{\xi} ; \boldsymbol{\theta})</script><p><strong>Score-based Model</strong>的目标是训练是一个<strong>分数网络</strong>$\mathbf s_{\theta}(\mathbf x)$来<strong>估计数据的Score Function</strong>，即</p>
+<script type="math/tex; mode=display">
+\frac{1}{2}\mathbb{E}_{p_{\mathrm{data}}}\left[\|\mathbf{s}_{\boldsymbol{\theta}}(\mathbf{x})-\nabla_{\mathbf{x}}\log p_{\mathrm{data}}(\mathbf{x})\|_{2}^{2}\right]</script><p>由于数据的Score Function是未知的，该式需要进一步推导，可以证明，该式在常数差距内等价于</p>
+<script type="math/tex; mode=display">
+\mathbb{E}_{p_{\mathrm{data}}(\mathbf{x})}\bigg[\operatorname{tr}(\nabla_{\mathbf{x}}\mathbf{s}_{\theta}(\mathbf{x}))+\frac{1}{2}\left\|\mathbf{s}_{\theta}(\mathbf{x})\right\|_2^2\bigg]</script><p>此时$\operatorname{tr}(\nabla<em>{\mathbf{x}}\mathbf{s}</em>{\theta}(\mathbf{x}))$仍是难以计算的，不同的Score-based Model目标就是解决这个问题</p>
+<p>一种比较常用的方法是<strong>降噪分数匹配（denoising score matching）</strong></p>
+<p>其首先使用一个噪声分布$q_{\sigma}(\tilde{\mathbf x}|\mathbf x)$对数据点$\mathbf x$进行搅动，然后使用分数网络估计搅动后的数据分布</p>
+<script type="math/tex; mode=display">
+\frac{1}{2} \mathbb{E}_{q_{\sigma}(\tilde{\mathbf{x}} \mid \mathbf{x}) p_{\text {data }}(\mathbf{x})}\left[\left\|\mathbf{s}_{\boldsymbol{\theta}}(\tilde{\mathbf{x}})-\nabla_{\tilde{\mathbf{x}}} \log q_{\sigma}(\tilde{\mathbf{x}} \mid \mathbf{x})\right\|_{2}^{2}\right]</script><p>可以证明该式最小化时有$\mathbf{s}^*<em>{\boldsymbol{\theta}}(\tilde{\mathbf{x}})=\nabla</em>{\mathbf{x}} \log q<em>{\sigma}(\mathbf{x})$，当噪声足够小时$q</em>{\sigma}(\mathbf{x})\approx p_{data}(\mathbf x)$</p>
+<p>获得了分数网络$\mathbf s<em>{\theta}(\mathbf x)$后，我们可以使用<strong>Lagevin Dynamics</strong>（或称<strong>Lagevin Sampling</strong>）从Score Function $\nabla</em>{\mathbf x} p_{\mathrm{data}}(\mathbf{x})$中进行采样，它是一种<strong>MCMC</strong>采样方法</p>
+<p>给定固定步长$\epsilon &gt; 0$、先验分布$\pi$和初始值$\tilde{\mathbf{x}}_0 \sim \pi(\mathbf x)$，Lagevin Sampling循环计算</p>
+<script type="math/tex; mode=display">
+\tilde{\mathbf{x}}_{t}=\tilde{\mathbf{x}}_{t-1}+\frac{\epsilon}{2} \nabla_{\mathbf{x}} \log p\left(\tilde{\mathbf{x}}_{t-1}\right)+\sqrt{\epsilon} \mathbf{z}_{t}</script><p>其中$\mathbf{z}<em>t\sim \mathcal N(0, I)$，当$\epsilon \to 0, T\to \infty$时，$\tilde{\mathbf{x}}</em>{t}$（在一些正则条件下）就是$p(\mathbf x)$的准确采样</p>
+<h2 id="Diffusion-Models-and-Denoising-Autoencoders"><a href="#Diffusion-Models-and-Denoising-Autoencoders" class="headerlink" title="Diffusion Models and Denoising Autoencoders"></a>Diffusion Models and Denoising Autoencoders</h2><p>通过指定不同的$\beta<em>t$和不同的逆向过程$p</em>{\theta}\left(\mathbf{x}<em>{t-1}|\mathbf{x}</em>{t}\right)$的参数化形式，可以得到扩散模型的很多不同实现</p>
+<p>下面要讨论的一种实现将<strong>使扩散模型产生与降噪分数匹配等价的效果</strong></p>
+<p>对于$\beta_t$，我们将其<strong>固定为常数</strong>，此时后验$q$无可学习参数，进而$L_T$也是常数，因此可以忽略</p>
+<p>对于逆向过程 $p<em>{\theta}\left(\mathbf{x}</em>{t-1}|\mathbf{x}<em>{t}\right):=\mathcal{N}\left(\mathbf{x}</em>{t-1} ; \boldsymbol{\mu}<em>{\theta}\left(\mathbf{x}</em>{t}, t\right), \boldsymbol{\Sigma}<em>{\theta}\left(\mathbf{x}</em>{t}, t\right)\right)$</p>
+<p>首先，令$\boldsymbol{\Sigma}<em>{\theta}\left(\mathbf{x}</em>{t}, t\right)=\sigma_t^2 \mathbf I$，其中$\sigma^2_t$<strong>是常量</strong>且相互独立，不参与训练</p>
+<p>从实验结果来看，$\sigma^2<em>t=\beta_t$和$\sigma^2_t=\tilde{\beta}</em>{t}$具有相似效果（但是论文中的解释暂时没看懂）</p>
+<blockquote>
+<p>The first choice is optimal for $\mathbf x_0 \sim \mathcal N (\mathbf0, \mathbf I)$, and the second is optimal for $x_0$ deterministically set to one point. These are the two extreme choices corresponding to upper and lower bounds on reverse process entropy for data with coordinatewise unit variance.</p>
+</blockquote>
+<p>此时我们可以根据正态分布间的KL散度公式进一步推导得</p>
+<script type="math/tex; mode=display">
+L_{t-1}=\mathbb{E}_{q}\left[\frac{1}{2 \sigma_{t}^{2}}\left\|\tilde{\boldsymbol{\mu}}_{t}\left(\mathbf{x}_{t}, \mathbf{x}_{0}\right)-\boldsymbol{\mu}_{\theta}\left(\mathbf{x}_{t}, t\right)\right\|^{2}\right]+C</script><p>其中$C$是与$\theta$无关的常量</p>
+<p>前面提到前向过程可以在任意时间步采样，即$q(\mathbf x_t|\mathbf x_0)=\mathcal N(\mathbf x_t;\sqrt{\bar\alpha_t}\mathbf x_0,(1-\bar\alpha_t)\mathbf I)$</p>
+<p>我们对其使用重参数化技巧，令$\epsilon \sim \mathcal N(\mathbf 0,\mathbf I)$，则 $\mathbf x<em>t(\mathbf x_0, \epsilon)=\sqrt{\bar\alpha_t}\mathbf x_0+\sqrt{1-\bar\alpha_t}\epsilon$，将其带入$L</em>{t}$得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L_{t-1}-C & =\mathbb{E}_{\mathbf{x}_{0}, \boldsymbol{\epsilon}}\left[\frac{1}{2 \sigma_{t}^{2}}\left\|\tilde{\boldsymbol{\mu}}_{t}\left(\mathbf{x}_{t}\left(\mathbf{x}_{0}, \boldsymbol{\epsilon}\right), \frac{1}{\sqrt{\bar{\alpha}_{t}}}\left(\mathbf{x}_{t}\left(\mathbf{x}_{0}, \boldsymbol{\epsilon}\right)-\sqrt{1-\bar{\alpha}_{t}} \boldsymbol{\epsilon}\right)\right)-\boldsymbol{\mu}_{\theta}\left(\mathbf{x}_{t}\left(\mathbf{x}_{0}, \boldsymbol{\epsilon}\right), t\right)\right\|^{2}\right] \\
+& =\mathbb{E}_{\mathbf{x}_{0}, \boldsymbol{\epsilon}}\left[\frac{1}{2 \sigma_{t}^{2}}\left\|\frac{1}{\sqrt{\alpha_{t}}}\left(\mathbf{x}_{t}\left(\mathbf{x}_{0}, \boldsymbol{\epsilon}\right)-\frac{\beta_{t}}{\sqrt{1-\bar{\alpha}_{t}}} \boldsymbol{\epsilon}\right)-\boldsymbol{\mu}_{\theta}\left(\mathbf{x}_{t}\left(\mathbf{x}_{0}, \boldsymbol{\epsilon}\right), t\right)\right\|^{2}\right]
+\end{aligned}</script><p>从这个推导结果容易得到，对于均值$\mathbf \mu_{\theta}(x_t,t)$，我们应将其参数化为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\boldsymbol{\mu}_{\theta}(\mathbf{x}_{t},t )=\tilde{\mu}_{t}\left(\mathbf{x}_{t},\frac{1}{\sqrt{\bar{\alpha}_{t}}}(\mathbf{x}_{t}-\sqrt{1-\bar{\alpha}_{t}}\epsilon_{\theta}(\mathbf{x}_{t}))\right)=\frac{1}{\sqrt{\alpha_{t}}}\left(\mathbf{x}_{t}-\frac{\beta_{t}}{\sqrt{1-\bar{\alpha}_{t}}}\epsilon_{\theta}(\mathbf{x}_{t},t)\right) 
+\end{aligned}</script><p>其中$\mathbf x<em>t$是给定的模型输入，$\epsilon</em>{\theta}$是根据$\mathbf x_t$预测$\epsilon$的近似函数</p>
+<p>确定均值的参数化方法后，$L_{t}$可化简为</p>
+<script type="math/tex; mode=display">
+\mathbb{E}_{\mathbf{x}_0,\epsilon}\left[\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar{\alpha}_t)}\left\|\epsilon-\epsilon_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x}_0+\sqrt{1-\bar{\alpha}_t}\epsilon,t)\right\|^2\right]</script><p>此时可以明显看出<strong>该式与降噪分数匹配非常类似</strong>，实际上是在多个尺度的噪声下进行降噪分数匹配，其中的$\epsilon_{\theta}$就相当于学习到的数据梯度</p>
+<p>下面给出该参数化方法下扩散模型的算法伪码，如Algorithm2所示，采样$\mathbf x<em>{t-1}\sim p</em>{\theta}(\mathbf x<em>{t-1}|\mathbf x_t)$即计算$\mathbf{x}</em>{t-1}=\frac{1}{\sqrt{\alpha<em>t}}\left(\mathbf{x}_t-\frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon</em>\theta(\mathbf{x}_t,t)\right)+\sigma_t\mathbf{z}$，其中$z \sim \mathcal N(\mathbf 0,\mathbf I)$，这个过程与<strong>Langevin dynamics</strong>类似</p>
+<p><img src="G:\code\cloud\blog\img\DDPM_algorithm.png" alt="DDPM_algorithm"></p>
+<h2 id="Discrete-Decoder-of-Reverse-Process"><a href="#Discrete-Decoder-of-Reverse-Process" class="headerlink" title="Discrete Decoder of Reverse Process"></a>Discrete Decoder of Reverse Process</h2><p>由RGB表示的图像中每个像素点离散地在${0,1,…,255}$中取值，但现在逆过程中每一步都是连续的高斯分布</p>
+<p>为了获得离散似然，我们需要将<strong>逆过程的最后一步</strong>改写为一个<strong>独立的离散解码器</strong>(independent discrete decoder)</p>
+<p>以下我们假设所有图像的像素值都从$[0,255]$均匀的缩放到了$[-1,1]$</p>
+<p>由于上述推导中假定逆过程的协方差矩阵是对角阵，所以显然有</p>
+<script type="math/tex; mode=display">
+p_{\theta}(\mathbf x_0|\mathbf x_1)
+=\prod_{i=1}^D p_{\theta}(\mathbf x_0^i|\mathbf x_1^i)
+=\prod_{i=1}^D\mathcal{N}\left(x ; \mu_{\theta}^{i}\left(\mathbf{x}_{1}, 1\right), \sigma_{1}^{2}\right)</script><p>其中$D$是数据的维度</p>
+<p>接下来使用<strong>分箱</strong>进行离散化，即像素点取值在区间$[x-\frac{1}{255},x+\frac{1}{255}]$时视为取离散值$x$，$x=1,2,…,255$，于是有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+p_{\theta}\left(\mathbf{x}_{0} \mid \mathbf{x}_{1}\right) & =\prod_{i=1}^{D} \int_{\delta_{-}\left(x_{0}^{i}\right)}^{\delta_{+}\left(x_{0}^{i}\right)} \mathcal{N}\left(x ; \mu_{\theta}^{i}\left(\mathbf{x}_{1}, 1\right), \sigma_{1}^{2}\right) d x \\
+\delta_{+}(x) & =\left\{\begin{array}{ll}
+\infty & \text { if } x=1 \\
+x+\frac{1}{255} & \text { if } x<1
+\end{array} \quad \delta_{-}(x)=\left\{\begin{array}{ll}
+-\infty & \text { if } x=-1 \\
+x-\frac{1}{255} & \text { if } x>-1
+\end{array}\right.\right.
+\end{aligned}</script><h2 id="Simplified-training-object"><a href="#Simplified-training-object" class="headerlink" title="Simplified training object"></a>Simplified training object</h2><p>作者在实验中发现，将前面推导的得到的训练目标进一步化简可以得到更好的生成效果</p>
+<script type="math/tex; mode=display">
+L_{\text {simple }}(\theta):=\mathbb{E}_{t, \mathbf{x}_{0}, \boldsymbol{\epsilon}}\left[\left\|\boldsymbol{\epsilon}-\boldsymbol{\epsilon}_{\theta}\left(\sqrt{\bar{\alpha}_{t}} \mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t}} \boldsymbol{\epsilon}, t\right)\right\|^{2}\right]</script><p>其中$t\sim U(1,T)$，即均匀分布</p>
+<h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p>IS和FID是评价（图像）生成模型的常用量化方法</p>
+<p><strong>IS（Inception Score）</strong>使用Inception Net输出图像$x$的<strong>1000维分类向量</strong>$y$，并从两方面量化生成图像的质量</p>
+<ul>
+<li><p><strong>清晰度</strong>：对单一的生成图像，其类别分布的熵应尽可能小，即对于清晰的图片，其属于某一个类别的概率应趋近于1，其余则趋近于0。因此最小化</p>
+<script type="math/tex; mode=display">
+E_{x\sim p_g}\left[H(p(y\|x))\right]</script></li>
+<li><p><strong>多样性：</strong>对成批的生成图像，其类别分布的熵应尽量大，即生成模型生成的图像类别因尽可能丰富，因此最大化</p>
+<script type="math/tex; mode=display">
+H(E_{x\sim p_g}\left[p(y\|x))\right])</script></li>
+</ul>
+<p>将前者取负，两者相加后得IS表达式，<strong>IS越大，生成图像质量越高</strong></p>
+<script type="math/tex; mode=display">
+IS=\exp\left(E_{x\sim p_g}\left[D_{KL}(p(y|x)\|p(y))\right]\right)</script><p><strong>FID（Frechet Inception Distance）</strong>使用Inception Net-V3并删除最后的分类层，得到图像的<strong>2048维特征向量</strong></p>
+<p>FID的思想是<strong>直接计算真实图像分布和生成图像分布的距离</strong>，但图像分布维度过大不易计算，因此使用Inception输出的2048维特征向量计算Frechet Distance，显然<strong>FID越小越好</strong></p>
+<script type="math/tex; mode=display">
+FID=\|\mu_x-\mu_g\|^2+tr\left(\Sigma_x+\Sigma_g-2(\Sigma_x\Sigma_g)^{\frac{1}{2}}\right)</script><p>下图Table 1、Table2展示了DDPM的IS、FID和NLL比较</p>
+<p>由Tabel 1可知DPPM的IS仅次于StyleGAN2+ADA，而FID则最优，对于负对数似然NLL，论文称<strong>使用未化简的变分目标得到的NLL更好，但图片质量不如化简的目标</strong></p>
+<p>Table 2对比的是不同的$L$和不同的逆过程参数化方法</p>
+<p><img src="G:\code\cloud\blog\img\DDPM_IS_FID.png" alt="DDPM_IS_FID"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/05/25/DDPM%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/">https://niiickz.github.io/2023/05/25/DDPM%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/07/17/HRED%20for%20Dialogue%20System/" title="HRED for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">HRED for Dialogue System</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/07/Score%20Matching%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Score Matching论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Score Matching论文解读</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Diffusion-Model"><span class="toc-number">1.</span> <span class="toc-text">Diffusion Model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Score-based-Model"><span class="toc-number">2.</span> <span class="toc-text">Score-based Model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Diffusion-Models-and-Denoising-Autoencoders"><span class="toc-number">3.</span> <span class="toc-text">Diffusion Models and Denoising Autoencoders</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Discrete-Decoder-of-Reverse-Process"><span class="toc-number">4.</span> <span class="toc-text">Discrete Decoder of Reverse Process</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Simplified-training-object"><span class="toc-number">5.</span> <span class="toc-text">Simplified training object</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Experiment"><span class="toc-number">6.</span> <span class="toc-text">Experiment</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

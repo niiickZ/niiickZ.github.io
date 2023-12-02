@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>神经网络入门基础 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="感知机什么是感知机感知机是神经网络的起源算法在理解感知机的基础上我们可以了解到现代神经网络是如何一步步演化来的 如图所示就是一个感知机，其中$x_1,x_2$为输入信号，$y$为输出信号，$w_1,w_2$为连接权，$b$称为偏置这个感知机表示函数 f(x)&#x3D; \begin{cases}  0 &amp; ,{w_1x_1+w_2x_2-b \leq 0}\\ 1 &amp; ,{w_1x_1+w_2x_2-b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络入门基础">
+<meta property="og:url" content="https://niiickz.github.io/2022/01/06/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="感知机什么是感知机感知机是神经网络的起源算法在理解感知机的基础上我们可以了解到现代神经网络是如何一步步演化来的 如图所示就是一个感知机，其中$x_1,x_2$为输入信号，$y$为输出信号，$w_1,w_2$为连接权，$b$称为偏置这个感知机表示函数 f(x)&#x3D; \begin{cases}  0 &amp; ,{w_1x_1+w_2x_2-b \leq 0}\\ 1 &amp; ,{w_1x_1+w_2x_2-b">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-01-06T03:41:15.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.259Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/01/06/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '神经网络入门基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">神经网络入门基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-01-06T03:41:15.000Z" title="Created 2022-01-06 11:41:15">2022-01-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.259Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="神经网络入门基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h2><h3 id="什么是感知机"><a href="#什么是感知机" class="headerlink" title="什么是感知机"></a>什么是感知机</h3><p>感知机是神经网络的起源算法<br>在理解感知机的基础上我们可以了解到现代神经网络是如何一步步演化来的</p>
+<p>如图所示就是一个感知机，其中$x_1,x_2$为输入信号，$y$为输出信号，$w_1,w_2$为连接权，$b$称为偏置<br>这个感知机表示函数</p>
+<script type="math/tex; mode=display">f(x)= \begin{cases} 
+0 & ,{w_1x_1+w_2x_2-b \leq 0}\\
+1 & ,{w_1x_1+w_2x_2-b > 0} 
+\end{cases}</script><p><img src="G:\code\cloud\blog\img\perceptron.png" alt="perceptron"></p>
+<p>显然通过合理设定$w_1,w_2$，这样一个感知机模型可以表示出与门、或门、与非门等<br>例如$(w_1,w_2,b)=(0.5,0.5,0.7)$时这个感知机就构成了一个与门<br>又显然可以有多组不同的$(w_1,w_2,b)$使得感知机构成与门</p>
+<p>同理对或门、与非门等也是如此，这体现出感知机具有一定的<strong>表示非线性关系的能力</strong></p>
+<h3 id="多层感知机"><a href="#多层感知机" class="headerlink" title="多层感知机"></a>多层感知机</h3><p>现在已知感知机有表示非线性关系的能力，考虑使用上述感知机来构造<strong>异或门</strong><br>但这时我们发现无论如何构造权值都无法满足要求</p>
+<p>试着形象化这个问题，即要用一条直线将圆点和三角点分隔开，这显然不可能</p>
+<p><img src="G:\code\cloud\blog\img\perceptron_xor.png" alt="perceptron_xor"></p>
+<p>然而我们已知异或门可以由与门、或门、与非门等的组合表示<br>这启发我们类似组合基本门一样<strong>堆叠感知机</strong></p>
+<p>如图所示（图中偏置未标出），$x_1,x_2,s_1$组成的感知机构成与非门，$x_1,x_2,s_2$组成的感知机构成或门，$s_1,s_2,y$组成的感知机构成与门<br>这样我们就通过堆叠感知机获得了一个异或门</p>
+<p><img src="G:\code\cloud\blog\img\perceptron_multi.png" alt="perceptron_multi"></p>
+<p>我们将堆叠起来的感知机称为<strong>多层感知机</strong><br>异或门的例子说们多层感知机可以<strong>有更强的非线性表示能力</strong></p>
+<h2 id="从感知机到神经网络"><a href="#从感知机到神经网络" class="headerlink" title="从感知机到神经网络"></a>从感知机到神经网络</h2><p>上述的多层感知机其实已经非常接近神经网络模型了</p>
+<p>如下图所示，神经网络包含一个n维输入层，一个m维输出层，中间层也称为隐藏层<br>层于层之间都是<strong>全连接</strong>，且运算方式和多层感知机基本一致</p>
+<p>这样的神经网络称为<strong>前馈式神经网络</strong>，其完成一次从输入到输出的计算称为一次<strong>前向传播</strong><br>为了具有比多层感知机更强的非线性表示能力，神经网络在多层感知机基础上引入了<strong>激活函数</strong></p>
+<p><img src="G:\code\cloud\blog\img\nn.png" alt="nn"></p>
+<h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>回忆感知机的函数表示</p>
+<script type="math/tex; mode=display">f(x)= \begin{cases} 
+0 & ,{w_1x_1+w_2x_2-b \leq 0}\\
+1 & ,{w_1x_1+w_2x_2-b > 0} 
+\end{cases}</script><p>我们将其改写为$y=h(w_1x_1+w_2x_2-b)$</p>
+<p>其中$h(x)$就是激活函数，在感知机中激活函数为</p>
+<script type="math/tex; mode=display">h(x)= \begin{cases} 
+0 & ,x \leq 0\\
+1 & ,x > 0
+\end{cases}</script><p>这样的函数称为<strong>阶跃函数</strong>（图中蓝线）<br>由于其导数恒为0，且不连续，会导致表示能力弱、神经网络参数难以更新等问题</p>
+<p>对比神经网络常用的<strong>sigmoid</strong>函数（图中橘线）</p>
+<script type="math/tex; mode=display">h(x)=\frac{1}{1+e^{-x}}</script><p>可以明显看出两者值域都在0~1间，但sigmoid具有<strong>平滑、连续</strong>的特点</p>
+<p>这样的激活函数相对于阶跃函数对神经网络的学习有很多优点</p>
+<p><img src="G:\code\cloud\blog\img\activation.png" alt="Step function"></p>
+<p>其他常用的激活函数还有<strong>Softmax、ReLU、Tanh</strong>等等<br>可以看这里 <a target="_blank" rel="noopener" href="https://renns.top/post/14/">神经网络中常见的激活函数</a> 了解</p>
+<h2 id="神经网络的学习"><a href="#神经网络的学习" class="headerlink" title="神经网络的学习"></a>神经网络的学习</h2><h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>上述感知机模型中我们已知目标函数，因此可以直接为其赋值<br>但通常情况下我们并不知道神经网络所要学习的目标函数<br>因此神经网络所表示的函数与目标函数的误差就只能通过<strong>网络输出值与真实值的误差</strong>体现出来<br>而衡量这个误差就需要引入<strong>损失函数</strong></p>
+<p>记网络输出值（第k维）为$\hat{y_k}$，真实值为$y_k$，常见的损失函数如下</p>
+<ul>
+<li><strong>绝对误差MAE</strong>：$E=\sum_k|\hat{y_k}-y_k|$</li>
+<li><strong>均方误差MSE</strong>：$E=\sum_k(\hat{y_k}-y_k)^2$</li>
+<li><strong>交叉熵误差CrossEntropy</strong>：$E=-\sum_ky_k\log{\hat{y_k}}$</li>
+</ul>
+<p>其中交叉熵误差用于分类学习，详细解释可以看这里 <a target="_blank" rel="noopener" href="https://renns.top/post/12/">交叉熵CrossEntropy详解</a></p>
+<h3 id="再谈损失函数的引入"><a href="#再谈损失函数的引入" class="headerlink" title="再谈损失函数的引入"></a>再谈损失函数的引入</h3><p>回顾引入损失函数的原因，为什么衡量误差不能直接用准确率呢<br>理由和激活函数选择抛弃阶跃函数相似</p>
+<p>若以准确率作为衡量标准，参数的导数在大多数地方会变成0，使得参数难以更新</p>
+<p>例如网络在100张猫的图片中识别出37张猫的图片，则准确率为37%<br>此时仅仅微调参数，<strong>准确率可能不会变化</strong>，也就<strong>不能为下一次参数更新提供参考</strong></p>
+<p>其次准确率的值<strong>不连续</strong>也使得的学习很难进行</p>
+<h3 id="Mini-batch学习"><a href="#Mini-batch学习" class="headerlink" title="Mini-batch学习"></a>Mini-batch学习</h3><p>通常训练神经网络所用的数据集十分大，可能为百万甚至千万级<br>受限于硬件条件，我们往往不可能一次性将所有数据送入网络，因此需要<strong>mini-batch学习</strong><br>即<strong>每次从数据集中随机选取一个batch的数据</strong>送入网络学习</p>
+<p>一个batch的大小可以是任意值，通常会取16、32，64、128等二的次幂</p>
+<p>mini-batch学习中网络需要衡量一个batch数据的整体误差，也即需要对一个batch的<strong>损失求平均值</strong><br>例如均方误差为$E=\frac{1}{N}\sum\sum_k(\hat{y_k}-y_k)^2$</p>
+<h3 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h3><p>上述感知机模型中权值我们都是手动设定的<br>但神经网络的参数量显然不能再依靠手动设置，此时就要引入<strong>梯度下降法</strong></p>
+<p>我们假设目标函数为$f(x_1,x_2,…,x_n)$，并假设它是一个<strong>凹函数</strong><br>其任意一点梯度为${\frac{\partial{f}}{\partial{x_1}},\frac{\partial{f}}{\partial{x_2}},…,\frac{\partial{f}}{\partial{x_n}}}$</p>
+<p>我们给$\boldsymbol{x}$​指定任意初始值，梯度下降法每次令$x_i\leftarrow x_i-\eta\frac{\partial{f}}{\partial{x_i}}$​<br>其中常数$\eta$称为<strong>学习率</strong>，通常指定为一个较小值，如0.01或0.001</p>
+<p>梯度下降法的含义就是<strong>不断小步地沿着梯度方向朝目标函数极小值点靠近</strong></p>
+<p><strong>学习率过大</strong>可能导致梯度下降法不断<strong>在极值点附近震荡而不能到达极值点</strong><br>而<strong>学习率过小</strong>可能导致<strong>神经网络训练效率底</strong></p>
+<h3 id="误差反向传播法"><a href="#误差反向传播法" class="headerlink" title="误差反向传播法"></a>误差反向传播法</h3><p>为了将梯度下降法应用于神经网络的参数<br>我们需要求<strong>损失函数对各层参数的梯度</strong></p>
+<p>误差反向传播(BP)算法就是求解这些梯度的算法<br>反向传播的含义在于求梯度过程需要利用<strong>求导的链式法则</strong>从网络最后一层开始<strong>依次反向计算每一层的梯度</strong></p>
+<p>求梯度的具体实现中使用了称为<strong>计算图</strong>的方法，此处不再展开说明</p>
+<h3 id="梯度下降法的深入"><a href="#梯度下降法的深入" class="headerlink" title="梯度下降法的深入"></a>梯度下降法的深入</h3><p>利用BP算法完成神经网络每层参数当前梯度的计算后<br>若直接按照公式$x_i=x_i-\eta\frac{\partial{f}}{\partial{x_i}}$更新参数，则称为<strong>随机梯度下降法SGD</strong></p>
+<p>SGD虽然实现简单，但在一些问题的求解上可能效率并不高<br>因此许多其他参数更新器陆续被提出，例如<strong>Momentum、Adam、AdaGrad</strong>等等<br>我们将这些参数更新器称为optimizer或solver<br>可以看这里详细了解 <a target="_blank" rel="noopener" href="https://renns.top/post/7/">神经网络中常见的optimizer</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>文中已经解释了神经网络大部分基础理论<br>接下来可以试着直接上手pytorch、tensorflow或keras边码边学习深入的内容</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/01/06/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/">https://niiickz.github.io/2022/01/06/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/01/06/%E4%BA%A4%E5%8F%89%E7%86%B5CrossEntropy%E8%AF%A6%E8%A7%A3/" title="交叉熵CrossEntropy详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">交叉熵CrossEntropy详解</div></div></a></div><div class="next-post pull-right"><a href="/2022/01/04/GAN%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%8D%B7%E7%A7%AF%E2%80%94%E2%80%94DCGAN/" title="GAN与深度卷积——DCGAN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">GAN与深度卷积——DCGAN</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-number">1.</span> <span class="toc-text">感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-number">1.1.</span> <span class="toc-text">什么是感知机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-number">1.2.</span> <span class="toc-text">多层感知机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%88%B0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">2.</span> <span class="toc-text">从感知机到神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">激活函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.</span> <span class="toc-text">神经网络的学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%8D%E8%B0%88%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%9A%84%E5%BC%95%E5%85%A5"><span class="toc-number">3.2.</span> <span class="toc-text">再谈损失函数的引入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mini-batch%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.3.</span> <span class="toc-text">Mini-batch学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95"><span class="toc-number">3.4.</span> <span class="toc-text">梯度下降法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AF%E5%B7%AE%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%B3%95"><span class="toc-number">3.5.</span> <span class="toc-text">误差反向传播法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%9A%84%E6%B7%B1%E5%85%A5"><span class="toc-number">3.6.</span> <span class="toc-text">梯度下降法的深入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

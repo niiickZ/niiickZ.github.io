@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>伪随机数产生算法概述 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="伪随机数产生的背景大量基于密码学的网络安全算法和协议都要使用二进制随机数 这些应用对随机数序列有两个要求  随机性：随机性可以用下面两个标准评价分布均匀性：序列中的位分布应是均匀的，即0、1出现的频率大致相等独立性：即序列中任何子序列不能由其他子序列推导出 不可预测性：即攻击者不能从先前的随机数推导出后面的随机数  随机数发生器可以分为真随机数发生器TRNG和伪随机数发生器PRNG TRNG把一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="伪随机数产生算法概述">
+<meta property="og:url" content="https://niiickz.github.io/2022/11/20/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="伪随机数产生的背景大量基于密码学的网络安全算法和协议都要使用二进制随机数 这些应用对随机数序列有两个要求  随机性：随机性可以用下面两个标准评价分布均匀性：序列中的位分布应是均匀的，即0、1出现的频率大致相等独立性：即序列中任何子序列不能由其他子序列推导出 不可预测性：即攻击者不能从先前的随机数推导出后面的随机数  随机数发生器可以分为真随机数发生器TRNG和伪随机数发生器PRNG TRNG把一个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-11-20T15:53:57.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.229Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/11/20/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '伪随机数产生算法概述',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">伪随机数产生算法概述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-11-20T15:53:57.000Z" title="Created 2022-11-20 23:53:57">2022-11-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.229Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="伪随机数产生算法概述"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="伪随机数产生的背景"><a href="#伪随机数产生的背景" class="headerlink" title="伪随机数产生的背景"></a>伪随机数产生的背景</h2><p>大量基于密码学的网络安全算法和协议都要使用二进制随机数</p>
+<p>这些应用对随机数序列有两个要求</p>
+<ul>
+<li><strong>随机性：</strong>随机性可以用下面两个标准评价<br><strong>分布均匀性：</strong>序列中的位分布应是均匀的，即0、1出现的频率大致相等<br><strong>独立性：</strong>即序列中任何子序列不能由其他子序列推导出</li>
+<li><strong>不可预测性：</strong>即攻击者不能从先前的随机数推导出后面的随机数</li>
+</ul>
+<p>随机数发生器可以分为<strong>真随机数发生器TRNG</strong>和<strong>伪随机数发生器PRNG</strong></p>
+<p>TRNG把一个或多个很随机的源（例如键盘敲击的时间模式、鼠标移动等）作为输入，称为熵源，并转换为二进制序列输出<br>一般而言，TRNG并不具有实用性，因为其有输出序列不可重现、效率较低等等缺点</p>
+<p>而PRNG则选择一个固定值作为输入，称为<strong>种子</strong>，并用一个<strong>确定性的算法</strong>产生二进制序列输出</p>
+<p>对<strong>随机性</strong>而言，要求PRNG尽管输出的位流是确定的但要“显示随机”<br>然而并没有单个测试可以判定一个PRNG算法产生的输出的随机性，一般做法是设计一系列测试，如果该PRNG算法在多个测试上表现良好，则认为它满足要求<br>对PRNG的随机性测试应该从如下几方面着手</p>
+<ul>
+<li><strong>均匀性：</strong>在序列的任何点，0或1出现的次数大约相等</li>
+<li><strong>可伸缩性：</strong>若序列是随机的，那么其中的任何子序列也应该是随机的，即任何子序列都应通过测试</li>
+<li><strong>一致性：</strong>对所有种子，发生器的行为必须具有一致性，也即使用任何种子都应通过测试</li>
+</ul>
+<p>对于<strong>不可预测性</strong>而言，PRNG应具有两种形式的不可预测性</p>
+<ul>
+<li><strong>前向不可预测性：</strong>若不知道种子，则无论已知序列中前面多少位，都无法预测下一位</li>
+<li><strong>后向不可预测性：</strong>从产生的任何值都不能推出种子</li>
+</ul>
+<p>显然若已知种子和PRNG算法，则攻击者可以重现整个随机数序列，因此种子必须不可预测且必须保密<br>事实上，为了保证种子安全，<strong>种子必须是随机数或伪随机数</strong>，典型的，<strong>种子可由TRNG产生</strong></p>
+<h2 id="常见的PRNG算法"><a href="#常见的PRNG算法" class="headerlink" title="常见的PRNG算法"></a>常见的PRNG算法</h2><h3 id="线性同余发生器"><a href="#线性同余发生器" class="headerlink" title="线性同余发生器"></a>线性同余发生器</h3><p>线性同余发的随机数序列${X_n}$按如下公式迭代获得</p>
+<script type="math/tex; mode=display">
+X_{n+1}=(aX_n+c)\mod m</script><p>其中$X_0$即为种子</p>
+<p>显然参数$a,c,m$的选择对线性同余法的好坏影响很大，例如$a=c=1$显然不行</p>
+<p>一般<strong>要求$m$很大</strong>，以便产生较长的不同随机数序列，同时可以证明若$m$为素数且$c=0$，则存在$a$使得输出序列的周期为$m-1$。$a=7^5,c=0,m=2^{31}-1$就是使用非常广泛的一组参数</p>
+<p>然而线性同余法并不那么安全，若攻击者确定了4个连续的随机数$X_0,X_1,X_2,X_3$，则可通过如下方程组直接求出$a,c,m$，从而确定整个随机数序列</p>
+<script type="math/tex; mode=display">
+X_1=a(X_0+c) \mod m\\
+X_2=a(X_1+c) \mod m\\
+X_3=a(X_3+c) \mod m</script><h3 id="BBS发生器"><a href="#BBS发生器" class="headerlink" title="BBS发生器"></a>BBS发生器</h3><p>BBS发生器是普遍使用的产生安全伪随机数的算法，其方法如下</p>
+<p>首先选择两个大素数$p,q$，满足$p\equiv q\equiv (\mod 4)$<br>令$n=pq$，并选择随机数$s$满足$s$与$n$互素，然后BBS按如下算法产生随机位流${B_i}$</p>
+<script type="math/tex; mode=display">
+X_0=s^2\mod n\\
+X_i=X_{i-1}^2\mod n \\
+B_i=X_i \mod 2</script><p>BBS的安全性是基于对n的因子分解的困难性上的</p>
+<h3 id="使用分组密码的PRNG"><a href="#使用分组密码的PRNG" class="headerlink" title="使用分组密码的PRNG"></a>使用分组密码的PRNG</h3><p>使用分组密码PRNG基于这样一个显然的现象，即对称分组密码产生的输出看起来是随机的，即密文里里没有可用于推导明文的规律<br>基于分组密码的<strong>CTR模式</strong>和<strong>OFB模式</strong>构建PRNG是两种广泛使用的方法</p>
+<p>如图所示，基于分组密码的PRNG的种子为密钥$K$和初值$V$<br>CTR模式中，$V$每次加密后增加1作为下一次输入，OFB中下一次输入为上一次的随机数输出</p>
+<p>SP 800-90A、ANS标准X9.82以及RFC4086都推荐了CTR模式<br>而X9.82和RFC 4086推荐了OFB模式</p>
+<p><img src="G:\code\cloud\blog\img\prng_blockcipher.png" alt="prng_blockcipher"></p>
+<h3 id="ANSI-X9-17伪随机数发生器"><a href="#ANSI-X9-17伪随机数发生器" class="headerlink" title="ANSI X9.17伪随机数发生器"></a>ANSI X9.17伪随机数发生器</h3><p>ANSI X9.17伪随机数发生器是密码学意义上最强的伪随机数发生器</p>
+<p>算法有两个64位输入$DT_i$和$V_i$，其中$DT_i$代表当前的日期和时间，每产生一次随机数更新一次，$V_i$为第$i$轮产生随机数的种子，需要指定$V_0$</p>
+<p>产生伪随机序列的公式如下，其中$EDE([K_1,K_2],X)$表示两个密钥三重DES的加密-解密-加密过程，$R_i$为该轮随机数输出</p>
+<script type="math/tex; mode=display">
+R_i=EDE([K_1,K_2],[V_i\oplus EDE([K_1,K_2], DT_i)])\\
+V_{i+1}=EDE([K_1,K_2],[R_i\oplus EDE([K_1,K_2], DT_i)])</script><p><img src="G:\code\cloud\blog\img\prng_ansix9.17.png" alt="prng_ansix9.17"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/11/20/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/">https://niiickz.github.io/2022/11/20/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/11/21/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E5%92%8C%E4%B9%98%E6%B3%95%E9%80%86%E5%85%83%E6%B1%82%E8%A7%A3/" title="扩展欧几里得和乘法逆元求解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">扩展欧几里得和乘法逆元求解</div></div></a></div><div class="next-post pull-right"><a href="/2022/11/20/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86AES/" title="高级加密标准AES"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">高级加密标准AES</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E7%9A%84%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">伪随机数产生的背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84PRNG%E7%AE%97%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">常见的PRNG算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%90%8C%E4%BD%99%E5%8F%91%E7%94%9F%E5%99%A8"><span class="toc-number">2.1.</span> <span class="toc-text">线性同余发生器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BBS%E5%8F%91%E7%94%9F%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">BBS发生器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84PRNG"><span class="toc-number">2.3.</span> <span class="toc-text">使用分组密码的PRNG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ANSI-X9-17%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%8F%91%E7%94%9F%E5%99%A8"><span class="toc-number">2.4.</span> <span class="toc-text">ANSI X9.17伪随机数发生器</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

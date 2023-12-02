@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>消息认证码MAC | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="消息认证消息认证，即验证所收到的消息确实来自真正的发送方，而且消息未被篡改过 消息加密提供认证对于对称加密，理论上其可同时提供消息认证与消息保密性 例如密钥K仅由A、B共享，若A使用密钥K加密消息M并发送给B，则B可以相信消息来自于A，因为只有A能产生出可用K解密的密文 但上述推理其实隐含了一个假设：接收方容易对解密出的明文的可读性进行自动判断 显然实际中这个假设并不容易满足，若消息M是任意二进制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消息认证码MAC">
+<meta property="og:url" content="https://niiickz.github.io/2022/11/22/%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81MAC/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="消息认证消息认证，即验证所收到的消息确实来自真正的发送方，而且消息未被篡改过 消息加密提供认证对于对称加密，理论上其可同时提供消息认证与消息保密性 例如密钥K仅由A、B共享，若A使用密钥K加密消息M并发送给B，则B可以相信消息来自于A，因为只有A能产生出可用K解密的密文 但上述推理其实隐含了一个假设：接收方容易对解密出的明文的可读性进行自动判断 显然实际中这个假设并不容易满足，若消息M是任意二进制">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-11-22T15:28:15.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.255Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/11/22/%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81MAC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '消息认证码MAC',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">消息认证码MAC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-11-22T15:28:15.000Z" title="Created 2022-11-22 23:28:15">2022-11-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.255Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="消息认证码MAC"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="消息认证"><a href="#消息认证" class="headerlink" title="消息认证"></a>消息认证</h2><p>消息认证，即验证所收到的消息确实来自真正的发送方，而且消息未被篡改过</p>
+<h3 id="消息加密提供认证"><a href="#消息加密提供认证" class="headerlink" title="消息加密提供认证"></a>消息加密提供认证</h3><p>对于<strong>对称加密</strong>，理论上其可同时提供消息认证与消息保密性</p>
+<p>例如密钥K仅由A、B共享，若A使用密钥K加密消息M并发送给B，则B可以相信消息来自于A，因为只有A能产生出可用K解密的密文</p>
+<p>但上述推理其实隐含了一个假设：<strong>接收方容易对解密出的明文的可读性进行自动判断</strong></p>
+<p>显然实际中这个假设并不容易满足，若消息M是任意二进制序列，比如二进制文件或数字化的X射线等，则很难确定解密后的消息是合法明文还是无意义的位串</p>
+<p>这个问题可以使用附加错误检测码来解决，也称为<strong>帧校验序列（FCS）</strong>，但此处不展开说明</p>
+<p>对于<strong>公钥加密</strong>，假设合法明文有易于判断的结构，则也可以同时提供消息认证与消息保密性</p>
+<p>若A要给B发送消息M，则A<strong>依次用自己的私钥和B的公钥对M加密</strong>，就分别提供了认证与保密，前者是因为只有A的公钥才能解密出合法明文，后者是因为除B外没有人能用B的私钥解密</p>
+<h3 id="消息认证码"><a href="#消息认证码" class="headerlink" title="消息认证码"></a>消息认证码</h3><p>消息认证码MAC又称密码校验和</p>
+<p>MAC使用MAC函数产生，其输入是不定长消息和密钥，输出为<strong>固定长度</strong>的短数据块</p>
+<p>例如A、B间共享密钥K，若A要向B发送消息M，则A计算$MAC=C(K,M)$<br>A将消息M和MAC同时发送给B，B使用密钥K对接收到的消息使用相同方法计算MAC，并与接收到的MAC比较，若相等，则B可以相信消息来自A且未被修改</p>
+<p>MAC函数与加密函数的一个重要区别是，<strong>MAC函数不要求可逆性</strong><br>由于这个性质，MAC与加密相比更不容易被攻破</p>
+<p>如果消息需要保密性，则可以先计算MAC，将MAC附加于消息后再应用加密算法</p>
+<h3 id="使用MAC的理由"><a href="#使用MAC的理由" class="headerlink" title="使用MAC的理由"></a>使用MAC的理由</h3><p>使用MAC而不是加密提供认证有一个很简单的理由，即在不关心保密性时消除解密过程造成的处理器资源浪费</p>
+<p>此外将认证和保密分离可是层次结构更加灵活，例如我们可能希望在应用层进行消息认证，而在如传输层这样的底层进行保密</p>
+<h2 id="MAC的安全性"><a href="#MAC的安全性" class="headerlink" title="MAC的安全性"></a>MAC的安全性</h2><p>MAC函数应具有如下性质</p>
+<ul>
+<li>若攻击者已知消息$M$和其认证码$MAC(K,M)$，则构造满足$MAC(K,M’)=MAC(K,M)$的$M’$在计算上不可行</li>
+<li>$MAC(K,M)$应是均匀分布的，即对任何随机消息$M$和$M’$，$MAC(K,M’)=MAC(K,M)$的概率为$2^{-n}$，其中$n$为MAC的位数</li>
+<li>若$M’$是$M$的某个已知变换，即$M’=f(M)$，要求$MAC(K,M’)=MAC(K,M)$的概率为$2^{-n}$</li>
+</ul>
+<p>其中最后一点要求MAC函数不应在消息的某个部分弱于其它部分，否则敌手获得M和MAC值后就有可能修改M中弱的部分，从而伪造出一个与原MAC相匹配的新消息</p>
+<p>我们可以分析对具备上述条件的MAC的穷举攻击</p>
+<p>设密钥长度为k，MAC长度为n，假设攻击者有若干对消息$M_i$及其MAC $T_i$<br>第一轮，攻击者枚举$2^k$个密钥，并找到约$2^{k-n}$个密钥满足$T_1=MAC(K, M_2)$<br>第二轮，攻击者使用$(M_2,T_2)$验证，匹配数约为$2^{k-2n}$<br>依此类推，攻击者需要约$\frac{k}{n}$轮穷举，说明穷举法确定认证密钥比较困难</p>
+<p>MAC的主要局限在与无法抵御<strong>重放攻击</strong><br>例如客户A给银行发消息转账给B，银行验证其MAC并执行了操作，但攻击者截获了该消息及MAC，并对银行反复发送，将会使得银行误以为要多次转账</p>
+<h2 id="基于Hash的MAC"><a href="#基于Hash的MAC" class="headerlink" title="基于Hash的MAC"></a>基于Hash的MAC</h2><h3 id="简单但不安全的构造"><a href="#简单但不安全的构造" class="headerlink" title="简单但不安全的构造"></a>简单但不安全的构造</h3><p>直接将消息附加在密钥之后计算Hash值的构造$T=MAC(K,M)=H(K|M)$称为<strong>秘密前缀MAC</strong></p>
+<p>秘密前缀MAC易受<strong>扩展长度攻击</strong></p>
+<p>设$M’$为填充后的消息$M$，$f$为安全Hash函数的压缩函数（可参考<a target="_blank" rel="noopener" href="https://renns.top/post/45/">密码学Hash函数基础</a>）<br>假设攻击者已知消息M和其MAC值$T=H(K|M’)$，则攻击者可选择任意消息$y$并计算出消息$M’|y$的MAC值$T’=H(K|M’|y)=f(T,y)$</p>
+<p>直接将密钥附加在消息之后计算Hash值的构造$T=MAC(K,M)=H(M|K)$称为<strong>秘密后缀MAC</strong></p>
+<p>对于秘密后缀MAC，若攻击者可以找到两个不同消息$M,M’$使得$H(M)=H(M’)$，则对任何密钥K都有$H(M|K)=H(M’|K)$<br>显然秘密后缀MAC的安全性取决于Hash函数的抗碰撞性</p>
+<h3 id="HMAC的设计目标"><a href="#HMAC的设计目标" class="headerlink" title="HMAC的设计目标"></a>HMAC的设计目标</h3><p>基于Hash函数的MAC称为HMAC，其思路是<strong>将密钥和消息一起作为哈希函数的输入求哈希值</strong></p>
+<p>HMAC的设计目标是将Hash函数视为“黑盒”，具体来说目标如下</p>
+<ul>
+<li>可以使用任何现有的哈希函数而不需要对其进行修改</li>
+<li>一旦有更快或者更安全的哈希函数，能够容易的对原来的嵌入Hash函数进行替代</li>
+<li>能保持原有哈希函数的性能</li>
+<li>对密钥的使用和管理要简单</li>
+<li>若已知嵌入的哈希函数的强度，则可以知道认证机制抗密码分析的强度</li>
+</ul>
+<h3 id="HMAC算法"><a href="#HMAC算法" class="headerlink" title="HMAC算法"></a>HMAC算法</h3><p>如图所示为HMAC算法结构，其具体步骤如下</p>
+<ol>
+<li>在密钥$K$左侧填充0得到b位的$K^+$，令$S_i=K^+\oplus ipad$，其中$ipad$为常数00110110（十六进制36）重复b/8次的结果</li>
+<li>将消息M按b位分组并附加于$S_i$之后，计算Hash值$h=H(S_i|M)$</li>
+<li>令$S_o=K^+\oplus opad$，其中$opad$为常数01011100（十六进制5C）重复b/8次的结果</li>
+<li>将Hash值h附加于$S_i$之后，再次计算Hash值即可获得$MAC=H(S_o|h)$</li>
+</ol>
+<p>该过程可表示为$HMAC(K,M)=H[(K^+\oplus opad)|H[(K^+\oplus ipad)|M]]$</p>
+<p>其中密钥K两次异或是为了<strong>伪随机地产生两个密钥</strong></p>
+<p>对于HMAC算法，可以证<strong>明成功攻击HMAC的概率等效于针对嵌入哈希函数的攻击</strong></p>
+<p><img src="G:\code\cloud\blog\img\hmac.png" alt="hmac"></p>
+<p>如图所示为HMAC更有效的实现方案，其中$f$是安全Hash结构中的压缩函数</p>
+<p>我们可以预先计算$f(IV,K^+\oplus opad)$和$f(IV,K^+\oplus ipad)$，在消息较短时这种方式很有意义</p>
+<p><img src="G:\code\cloud\blog\img\hmac_new.png" alt="hmac_new"></p>
+<h3 id="基于分组密码的MAC"><a href="#基于分组密码的MAC" class="headerlink" title="基于分组密码的MAC"></a>基于分组密码的MAC</h3><h3 id="数据认证算法DAA"><a href="#数据认证算法DAA" class="headerlink" title="数据认证算法DAA"></a>数据认证算法DAA</h3><p>DAA采用CBC模式的DES，如图所示，其中$D_i$为64位明文分组，其输出称为数据认证吗DAC</p>
+<p>这个方法有一个明显的缺陷，若$T=MAC(K,X)$是消息分组$X$的认证码，则攻击者直接知道消息 $X|(X\oplus T)$ 的认证码，因为这还是$T$</p>
+<p><img src="G:\code\cloud\blog\img\daa.png" alt="daa"></p>
+<h3 id="基于密码的消息认证码CMAC"><a href="#基于密码的消息认证码CMAC" class="headerlink" title="基于密码的消息认证码CMAC"></a>基于密码的消息认证码CMAC</h3><p>为了克服DAA的缺陷，CMAC使用三个密钥<br>即一个长度为k​的加密密钥K，两个长度为分组长度b的密钥$K_1、K_2$</p>
+<p>若最后一个分组长度为b，则该明文分组与密钥$K_1$及上一个分组加密结果异或<br>若最后一个分组长度不足b，则先填充1个1和若干个0，再与密钥$K_2$及上一个分组加密结果异或</p>
+<p>密钥$K_1,K_2$按如下方式导出</p>
+<script type="math/tex; mode=display">
+L=E(K,0^b)\\
+K_1=L\times x\\
+K_2=L\times x^2</script><p>其中<strong>乘法在域</strong>$GF(2^b)$<strong>上进行</strong>，$x$和$x^2$就是$GF(2^b)$的两个多项式</p>
+<p><img src="G:\code\cloud\blog\img\CMAC.png" alt="CMAC"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/11/22/%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81MAC/">https://niiickz.github.io/2022/11/22/%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81MAC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/11/23/%E7%BB%8F%E5%85%B8%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/" title="经典数字签名算法概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">经典数字签名算法概述</div></div></a></div><div class="next-post pull-right"><a href="/2022/11/22/%E5%AE%89%E5%85%A8Hash%E7%AE%97%E6%B3%95SHA-512/" title="安全Hash算法SHA-512"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">安全Hash算法SHA-512</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text">消息认证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%8A%A0%E5%AF%86%E6%8F%90%E4%BE%9B%E8%AE%A4%E8%AF%81"><span class="toc-number">1.1.</span> <span class="toc-text">消息加密提供认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81"><span class="toc-number">1.2.</span> <span class="toc-text">消息认证码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8MAC%E7%9A%84%E7%90%86%E7%94%B1"><span class="toc-number">1.3.</span> <span class="toc-text">使用MAC的理由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MAC%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">MAC的安全性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EHash%E7%9A%84MAC"><span class="toc-number">3.</span> <span class="toc-text">基于Hash的MAC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BD%86%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%9E%84%E9%80%A0"><span class="toc-number">3.1.</span> <span class="toc-text">简单但不安全的构造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HMAC%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">3.2.</span> <span class="toc-text">HMAC的设计目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HMAC%E7%AE%97%E6%B3%95"><span class="toc-number">3.3.</span> <span class="toc-text">HMAC算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84MAC"><span class="toc-number">3.4.</span> <span class="toc-text">基于分组密码的MAC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%AE%A4%E8%AF%81%E7%AE%97%E6%B3%95DAA"><span class="toc-number">3.5.</span> <span class="toc-text">数据认证算法DAA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%AF%86%E7%A0%81%E7%9A%84%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81CMAC"><span class="toc-number">3.6.</span> <span class="toc-text">基于密码的消息认证码CMAC</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

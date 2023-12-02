@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SpeechTransformer | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="论文链接：Speech-Transformer——A No-Recurrence Sequence-to-Sequence Model for Speech Recognition Speech Transformer即应用于语音识别的Transformer如下图所示其结构与普通Transformer结构基本完全一致不了解Transformer的可以看这篇博客Transformer——Attent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpeechTransformer">
+<meta property="og:url" content="https://niiickz.github.io/2022/02/20/SpeechTransformer/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="论文链接：Speech-Transformer——A No-Recurrence Sequence-to-Sequence Model for Speech Recognition Speech Transformer即应用于语音识别的Transformer如下图所示其结构与普通Transformer结构基本完全一致不了解Transformer的可以看这篇博客Transformer——Attent">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-02-20T13:37:43.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.221Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/02/20/SpeechTransformer/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SpeechTransformer',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SpeechTransformer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-02-20T13:37:43.000Z" title="Created 2022-02-20 21:37:43">2022-02-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.221Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SpeechTransformer"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>论文链接：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/8462506">Speech-Transformer——A No-Recurrence Sequence-to-Sequence Model for Speech Recognition</a></p>
+<p>Speech Transformer即应用于语音识别的Transformer<br>如下图所示其结构与普通Transformer结构基本完全一致<br>不了解Transformer的可以看这篇博客<a target="_blank" rel="noopener" href="https://renns.top/post/23/">Transformer——Attention is all you need详解</a>，此处不再赘述</p>
+<p><img src="D:\code\cloud\blog\img\speech_transformer.png" alt="speech_transformer" style="zoom:80%;" /></p>
+<p>Speech Transformer的亮点在于encoder中的<strong>2D Multi-Head Attention</strong><br>因为语音识别的输入一般是<strong>2D频谱图</strong>，若用普通的attention则只能提取时间方向的特征</p>
+<p>如图所示，因为是self-attention层，所以其输入只有一个，是尺寸为(height, width, channels)的特征图<br>首先对输入<strong>应用三个不同的卷积</strong>得到Query、Key和Value<br>再对Q,K,V分别进行filter数为c的卷积，<strong>c即表示head数</strong>，记为Q’,K’,V’</p>
+<p>对Q’,K’,V’的c个通道分别进行Scaled Dot-Product Attention再进行concat，即完成了对<strong>时间</strong>维度的attention<br>同理先将Q’,K’,V’<strong>转置</strong>再进行attention，输出concat后再<strong>转置</strong>，即完成了<strong>频率</strong>维度的attention</p>
+<p>最后将时间和频率的attention结果concat后再应用一个卷积，将输出通道数变回和输入相同即可</p>
+<p><img src="D:\code\cloud\blog\img\2Dattention.png" alt="2Dattention"></p>
+<p>下面贴一个2D Attention的keras简单实现，完整SpeechTransformer代码见<a target="_blank" rel="noopener" href="https://github.com/niiickZ/NeuralNet/blob/main/keras_tf/ASR/SpeechTransformer.py">SpeechTransformer.py</a></p>
+<p>因为encoder中Multihead Attention输入尺寸都是2D的，只有第一张图中addtional module的位置才有可能会有3D输入，所以以下实现中的输入输出默认尺寸为(batch_size, h, w)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MultiHeadAttention2D</span>(<span class="title class_ inherited__">Layer</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_heads</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;A simple implementation of 2D Multi-Head Attention proposed in paper</span></span><br><span class="line"><span class="string">        &quot;Speech-Transformer——A No-Recurrence Sequence-to-Sequence Model for Speech Recognition&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Note that the MultiHeadAttention2D can only be used as self-attention,</span></span><br><span class="line"><span class="string">        since it contains a transpose operation in &quot;frequency attention&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Argument:</span></span><br><span class="line"><span class="string">        :param num_heads: number of attention heads, i.e. number of filters of convolution</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        self.num_heads = num_heads</span><br><span class="line">        self.conv_Q = Conv2D(num_heads, <span class="number">5</span>, padding=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">        self.conv_V = Conv2D(num_heads, <span class="number">5</span>, padding=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">        self.conv_K = Conv2D(num_heads, <span class="number">5</span>, padding=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">        self.conv_out = Conv2D(<span class="number">1</span>, <span class="number">5</span>, padding=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">call</span>(<span class="params">self, query, value, key=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :param query: Query Tensor of shape (batch_size, Tq, dim)</span></span><br><span class="line"><span class="string">        :param value: Value Tensor of shape (batch_size, Tv, dim)</span></span><br><span class="line"><span class="string">        :param key: Key Tensor of shape (batch_size, Tv, dim). If not</span></span><br><span class="line"><span class="string">        given, will use &#x27;value&#x27; for both &#x27;key&#x27; and &#x27;value&#x27;</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> key:</span><br><span class="line">            key = value</span><br><span class="line"></span><br><span class="line">        <span class="comment"># expand (channel) dimension to apply convolution</span></span><br><span class="line">        <span class="comment"># shape (batch_size, T, dim) -&gt; (batch_size, T, dim, 1)</span></span><br><span class="line">        query = K.expand_dims(query, axis=-<span class="number">1</span>)</span><br><span class="line">        value = K.expand_dims(value, axis=-<span class="number">1</span>)</span><br><span class="line">        key = K.expand_dims(key, axis=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># shape (batch_size, T, dim, num_heads)</span></span><br><span class="line">        feat_Q = self.conv_Q(query)</span><br><span class="line">        feat_V = self.conv_V(value)</span><br><span class="line">        feat_K = self.conv_K(key)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Separate feature maps by channel</span></span><br><span class="line">        <span class="comment"># Then generate a list of tuples of length num_heads</span></span><br><span class="line">        <span class="comment"># like [(Q1, V1, K1), (Q2, V2, K2), ..., (Qn, Vn, Kn)]</span></span><br><span class="line">        combined = [</span><br><span class="line">            (feat_Q[:, :, :, i], feat_V[:, :, :, i], feat_K[:, :, :, i])</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.num_heads)</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># transpose feature maps to apply frequency attention</span></span><br><span class="line">        combined_transpose = [</span><br><span class="line">            (K.permute_dimensions(feat_query, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>)),</span><br><span class="line">             K.permute_dimensions(feat_value, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>)),</span><br><span class="line">             K.permute_dimensions(feat_key, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>)))</span><br><span class="line">            <span class="keyword">for</span> feat_query, feat_value, feat_key <span class="keyword">in</span> combined</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        out_temporal_atten = [</span><br><span class="line">            Attention()([feat_query, feat_value, feat_key])</span><br><span class="line">            <span class="keyword">for</span> feat_query, feat_value, feat_key <span class="keyword">in</span> combined</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        out_frequncy_atten = [</span><br><span class="line">            Attention()([feat_query_trans, feat_value_trans, feat_key_trans])</span><br><span class="line">            <span class="keyword">for</span> feat_query_trans, feat_value_trans, feat_key_trans <span class="keyword">in</span> combined_transpose</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># concatenate feature maps by channel</span></span><br><span class="line">        feat_time = K.concatenate([K.expand_dims(feat, -<span class="number">1</span>) <span class="keyword">for</span> feat <span class="keyword">in</span> out_temporal_atten], axis=-<span class="number">1</span>)</span><br><span class="line">        feat_freq = K.concatenate([K.expand_dims(feat, -<span class="number">1</span>) <span class="keyword">for</span> feat <span class="keyword">in</span> out_frequncy_atten], axis=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        feat = K.concatenate([feat_time, K.permute_dimensions(feat_freq, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>))], axis=-<span class="number">1</span>)</span><br><span class="line">        outputs = self.conv_out(feat)</span><br><span class="line">        outputs = K.squeeze(outputs, axis=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> outputs</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/02/20/SpeechTransformer/">https://niiickz.github.io/2022/02/20/SpeechTransformer/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/02/%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" title="神经风格迁移"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">神经风格迁移</div></div></a></div><div class="next-post pull-right"><a href="/2022/02/20/seq2seq%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E2%80%94%E2%80%94LAS/" title="seq2seq语音识别——LAS"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">seq2seq语音识别——LAS</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>隐马尔科夫模型 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="概率图模型是一类用图来表达变量相关关系的概率模型 概率图模型一般可以分为两种：使用有向无环图DAG的称为贝叶斯网，使用无向图的称为马尔可夫网 隐马尔科夫模型隐马尔科夫模型(Hidden Markov Model, HMM)是一种最简单的动态贝叶斯网 马尔可夫链的相关基础知识在马尔可夫链基础中已提到，此处不再赘述 令${Xn,n&#x3D;1,2,…}$是转移概率为$P{ij}$，初始状态概率为$\pi_i&#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="隐马尔科夫模型">
+<meta property="og:url" content="https://niiickz.github.io/2023/03/13/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="概率图模型是一类用图来表达变量相关关系的概率模型 概率图模型一般可以分为两种：使用有向无环图DAG的称为贝叶斯网，使用无向图的称为马尔可夫网 隐马尔科夫模型隐马尔科夫模型(Hidden Markov Model, HMM)是一种最简单的动态贝叶斯网 马尔可夫链的相关基础知识在马尔可夫链基础中已提到，此处不再赘述 令${Xn,n&#x3D;1,2,…}$是转移概率为$P{ij}$，初始状态概率为$\pi_i&#x3D;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-03-13T14:09:37.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.267Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/03/13/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '隐马尔科夫模型',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">隐马尔科夫模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-03-13T14:09:37.000Z" title="Created 2023-03-13 22:09:37">2023-03-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.267Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="隐马尔科夫模型"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>概率图模型是一类用图来表达变量相关关系的概率模型</p>
+<p>概率图模型一般可以分为两种：使用<strong>有向无环图DAG</strong>的称为<strong>贝叶斯网</strong>，使用<strong>无向图</strong>的称为<strong>马尔可夫网</strong></p>
+<h2 id="隐马尔科夫模型"><a href="#隐马尔科夫模型" class="headerlink" title="隐马尔科夫模型"></a>隐马尔科夫模型</h2><p>隐马尔科夫模型(Hidden Markov Model, HMM)是一种最简单的动态贝叶斯网</p>
+<p>马尔可夫链的相关基础知识在<a target="_blank" rel="noopener" href="https://renns.top/post/58/">马尔可夫链基础</a>中已提到，此处不再赘述</p>
+<p>令${X<em>n,n=1,2,…}$是转移概率为$P</em>{ij}$，初始状态概率为$\pi_i=P(X_1=i)$的马尔可夫链，记$S$是一个有限的信号集合</p>
+<p>若马尔可夫链在每一时刻都根据当前状态$X_n$发射一个信号$Y_n\in S$，满足若$X_n=j$则发射信号$s_i$的概率为</p>
+<p>$P{Y<em>n=s_i|X_n=j,X_1,Y_1,…X</em>{n-1},Y_{n-1}}=P{Y_n=s_i|X_n=j}$</p>
+<p>即发射信号的概率<strong>条件独立于过往时刻的状态和信号</strong>，只依赖于当前状态，这样的模型称为<strong>隐马尔科夫模型</strong></p>
+<p>隐马尔可夫模型中，只有<strong>信号序列</strong>$Y_1,Y_2,…$<strong>能被观测到</strong>，<strong>状态序列</strong>$X_1,X_2,…$是<strong>不可被观测的</strong></p>
+<p>记HMM的状态转移矩阵为$A$，观测值生成概率矩阵为$B$，初始状态分布为$\pi$，其中$A<em>{ij}$表示马尔可夫链由状态$i$转移到状态$j$的概率，$B</em>{ij}$表示处于状态$i$的马尔可夫链发射观测信号$s_j$的概率</p>
+<p>HMM主要关注三个问题</p>
+<ul>
+<li><strong>观测概率问题：</strong>假设$\lambda=[A,B,\pi]$已知，给定观测序列$Y=(Y_1,Y_2,…,Y_T)$，如何计算该观测序列的出现概率$P(Y|\lambda)$，也即如何评估模型与观测序列的相似程度</li>
+<li><strong>预测问题：</strong>假设$\lambda=[A,B,\pi]$已知，给定观测序列$Y=(Y_1,Y_2,…,Y_T)$，如何找到使得该观测序列的产生概率最大的状态转移序列$X=(X_1,X_2,…,X_T)$</li>
+<li><strong>学习问题：</strong>给定观测序列$Y=(Y_1,Y_2,…,Y_T)$，何如确定$\lambda=[A,B,\pi]$使得该观测序列的出现概率最大，也即如何训练模型使其能更好的描述观测数据</li>
+</ul>
+<h2 id="前后向算法"><a href="#前后向算法" class="headerlink" title="前后向算法"></a>前后向算法</h2><p>对于观测概率计算问题，若使用直接计算方法，则有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(Y|\lambda)&=\sum_{X}P(X|\lambda)P(Y|X,\lambda)\\
+&=\sum_X(\pi_{X_1}A_{X_1X_2}A_{X_2X_3}...A_{X_{T-1}X_T})\cdot(B_{X_1,Y_1}B_{X_2,Y_2}...B_{X_T,Y_T})
+\end{aligned}</script><p>假设马尔可夫链的状态空间大小为$N$，则该方法复杂度为$O(TN^T)$，显然计算量过大</p>
+<p>前后向算法使用了<strong>动态规划</strong>思想，首先说前向算法，令$\alpha_t(i)$表示$T$时刻时观测序列为$Y$，且状态为$i$的概率</p>
+<script type="math/tex; mode=display">
+\alpha_t(i)=P(Y_1,Y_2,...,Y_t,X_t=i|\lambda)</script><p>则有递推公式</p>
+<script type="math/tex; mode=display">
+\alpha_{t+1}(i)=B_{i, Y_{t+1}}\sum_{j}^N\alpha_t(j)A_{ji},\quad i=1,2,...,N</script><p>其含义不难理解，就是枚举上一时刻的可能状态进行概率求和。特别的，初值为</p>
+<script type="math/tex; mode=display">
+\alpha_1(i)=\pi_iB_{i, Y_1}</script><p>最终答案为</p>
+<script type="math/tex; mode=display">
+P(Y|\lambda)=\sum_{i=1}^N\alpha_T(i)</script><p>显然该算法的复杂度只有$O(TN^2)$</p>
+<p>类似的，可以定义后向算法，令$\beta_t(i)$表示已知$t$状态为$X_t=i$时，$t+1$到$T$时刻的观测序列为$Y$的概率</p>
+<script type="math/tex; mode=display">
+\beta_t(i)=P(Y_{t+1},Y_{t+2},...,Y_T|X_t=i,\lambda)</script><p>则初值和递推公式为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\beta_T(i)=1 \\
+&\beta_t(i)=\sum_{j=1}^NA_{ij}B_{j,Y_{t+1}}\beta_{t+1}(j), \quad i=1,2,...,N
+\end{aligned}</script><p>最终答案为</p>
+<script type="math/tex; mode=display">
+P(Y|\lambda)=\sum_{i=1}^N\pi_iB_{i,Y_1}\beta_1(i)</script><p>结合前后向算法，对于任意时刻$t=1,2,…,T$有</p>
+<script type="math/tex; mode=display">
+P(Y|\lambda)=\sum_{i=1}^N\alpha_t(i)\beta_t(i)</script><p>前后向算法的思想很常见，例如<strong>CTC损失</strong>也用了类似的算法</p>
+<h2 id="Viterbi算法"><a href="#Viterbi算法" class="headerlink" title="Viterbi算法"></a>Viterbi算法</h2><p>对于前述预测问题，朴素的想法是直接选择每个时刻最有可能出现的状态，即时刻$t$处于状态$i$的概率为</p>
+<script type="math/tex; mode=display">
+P(X_t=i|Y,\lambda)=\frac{\alpha_t(i)\beta(i)}{P(Y|\lambda)}=\frac{\alpha_t(i)\beta(i)}{\sum_{j=1}^N \alpha_t(j)\beta(j)}</script><p>则时刻$t$最有可能的状态是$X<em>t^*=\arg\max</em>{1\leq i\leq N}(P(X_t=i|Y,\lambda))$，从而得到状态序列$(X_1^<em>,X_2^</em>,…,X_T^*)$</p>
+<p>该算法有一个明显缺点，即各个状态的预测是独立的，得到的状态序列<strong>不一定是整体上概率最大的</strong></p>
+<p>解决预测问题的另一个方法是维特比(Viterbi)算法，其基本思想是<strong>动态规划</strong></p>
+<p>令$f(t,i)$表示时刻 $t$ 处于状态 $i$ 的所有路径中概率最大的路径对应的概率，即</p>
+<script type="math/tex; mode=display">
+f(t,i)=\max P(X_t=i,X_{t-1},...,X_1,Y_t,...,Y_1|\lambda), \quad i=1,2,...N</script><p>令$g(t,i)$表示时刻 $t$ 处于状态 $i$ 的所有路径中概率最大的路径$t-1$时刻的状态，则有递推公式</p>
+<script type="math/tex; mode=display">
+f(t,i)=\max_{1\leq j\leq N}[f(t-1,j)A_{ji}]B_{i, Y_t}\\
+g(t,i)=\arg \max_{1\leq j\leq N}[f(t-1,j)A_{ji}]</script><p>边界值为</p>
+<script type="math/tex; mode=display">
+f(1,i)=\pi_iB_{i,Y_1}\\
+g(1,i)=0</script><p>则最终答案$(X_1^<em>,X_2^</em>,…,X_T^*)$为</p>
+<script type="math/tex; mode=display">
+X_T^*=\arg \max_{i} (f(T,i)) \\
+X_t^*=g(t+1,X_{t+1}^*), \quad t=T-1,T-2,...,1</script><p>该算法复杂度为$O(NT)$</p>
+<h2 id="Baum-Welch算法"><a href="#Baum-Welch算法" class="headerlink" title="Baum-Welch算法"></a>Baum-Welch算法</h2><p>给定观测序列$Y=(Y_1,Y_2,…,Y_T)$，并将状态序列$X=(X_1,X_2,…,X_T)$视为隐变量，则隐马尔可夫模型参数$\lambda=[A,B,\pi]$的学习可以由<strong>EM算法</strong>实现，称其为Baum-Welch算法</p>
+<p>首先易知</p>
+<script type="math/tex; mode=display">
+P(X,Y|\lambda)=\pi_{X_1}A_{X_1,X_2}...A_{X_{T-1},X_T}B_{X_1,Y_1}...B_{X_T,Y_T}</script><p>定义EM算法中E-step的Q函数</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+Q(\lambda|\lambda^{(i)})
+&=\sum_Y\sum_X P(X|Y,\lambda^{(i)})\ln P(Y,X|\lambda)\\
+&=\sum_Y\sum_X \frac{P(X,Y|\lambda^{(i)})}{P(Y|\lambda^{(i)})}\ln P(Y,X|\lambda)
+\end{aligned}</script><p>注意到$P(Y|\lambda^{(i)})$是与隐变量$X$和参数$\lambda$无关的常量，对于M-step求极值来说可以消去</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+Q(\lambda|\lambda^{(i)})
+=&\sum_Y\sum_X P(X,Y|\lambda^{(i)})\ln P(Y,X|\lambda)\\
+=&\sum_Y\sum_X P(X,Y|\lambda^{(i)})\ln \pi_{X_1}+\sum_Y\sum_X P(X,Y|\lambda^{(i)})\sum_{t=1}^{T-1}\ln A_{X_t,X_{t+1}}\\&+\sum_Y\sum_X P(X,Y|\lambda^{(i)})\sum_{t=1}^T\ln B_{X_t,Y_t}
+\end{aligned}</script><p>此时三个参数$\pi,A,B$分离到三个项中，可以<strong>分别对各项求极值</strong></p>
+<hr>
+<p>对于参数$\pi$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\pi^{(i+1)}
+=&\arg\max_\pi \sum_Y\sum_X P(X,Y|\lambda^{(i)})\ln \pi_{X_1}\\
+=&\arg\max_\pi \sum_Y\sum_{X_1=1}^N\ln \pi_{X_1}\sum_{X/X_1}P(X_1,X/X_1,Y,\lambda^{(i)})\\
+=&\arg\max_\pi \sum_Y\sum_{i=1}^N P(X_1=i,Y,\lambda^{(i)})\ln \pi_{i}\\
+\end{aligned}</script><p>其中$X/X_1$表示状态序列$X$除去$X_1$后的子状态序列，推导中<strong>第2步到第3步</strong>实际上就是<strong>求边缘概率</strong></p>
+<p>此时加入限制条件$\sum_{i=1}^N\pi_i=1$，则根据拉格朗日乘子法设</p>
+<script type="math/tex; mode=display">
+f=\sum_Y\sum_{i=1}^N P(X_1=i,Y,\lambda^{(i)})\ln \pi_{i}+\gamma(\sum_{i=1}^N \pi_i-1)</script><p>求极值</p>
+<script type="math/tex; mode=display">
+\frac{\partial f}{\partial \pi_i}=\frac{\sum_Y P(X_1=i,Y|\lambda^{(i)})}{\pi_i}+\gamma=0</script><p>得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sum_Y P(X_1=i,Y|\lambda^{(i)})+\gamma\pi_i&=0\\
+\sum_Y \sum_{i=1}^N P(X_1=i,Y|\lambda^{(i)})+\gamma\sum_{i=1}^N\pi_i&=0\\
+\sum_Y P(Y|\lambda^{(i)})+\gamma=0
+\end{aligned}</script><p>将$\gamma$带回得</p>
+<script type="math/tex; mode=display">
+\pi^{(i+1)}=\pi_i=\frac{\sum_Y P(X_1=i,Y|\lambda^{(i)})}{\sum_Y P(Y|\lambda^{(i)})}</script><hr>
+<p>对于参数$A$，首先有</p>
+<script type="math/tex; mode=display">
+\sum_X P(X,Y|\lambda^{(k)})\sum_{t=1}^{T-1}\ln A_{X_t,X_{t+1}}=\sum_{i=1}^N\sum_{j=1}^N\sum_{t=1}^{T-1}\ln A_{ij}P(Y,X_t=i,X_{t+1}=j|\lambda^{k})</script><p>加入限制条件$\sum<em>{j=1}^NA</em>{ij}=1$，由拉格朗日乘子法设</p>
+<script type="math/tex; mode=display">
+f=\sum_{i=1}^N\sum_{j=1}^N\sum_{t=1}^{T-1}\ln A_{ij}P(Y,X_t=i,X_{t+1}=j|\lambda^{k})+\gamma(\sum_{j=1}^NA_{ij}-1)</script><p>求极值</p>
+<script type="math/tex; mode=display">
+\frac{\partial f}{\partial A_{ij}}=\sum_{t=1}^{T-1}\frac{P(Y,X_t=i,X_{t+1}=j|\lambda^{k})}{A_{ij}}+\gamma=0</script><p>得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sum_{t=1}^{T-1}P(Y,X_t=i,X_{t+1}=j|\lambda^{k})+A_{ij}\gamma&=0\\
+\sum_{j=1}^N\sum_{t=1}^{T-1}P(Y,X_t=i,X_{t+1}=j|\lambda^{k})+\sum_{j=1}^NA_{ij}\gamma&=0\\
+\sum_{t=1}^{T-1}P(Y,X_t=i|\lambda^{k})+\gamma&=0
+\end{aligned}</script><p>带回得</p>
+<script type="math/tex; mode=display">
+A_{ij}^{(k+1)}=A_{ij}=\frac{\sum_Y\sum_{t=1}^{T-1}P(Y,X_t=i,X_{t+1}=j|\lambda^{k})}{\sum_Y\sum_{t=1}^{T-1}P(Y,X_t=i|\lambda^{k})}</script><hr>
+<p>对于$B_{ij}$有</p>
+<script type="math/tex; mode=display">
+\sum_X P(X,Y|\lambda^{(k)})\sum_{t=1}^T\ln B_{X_t,Y_t}=\sum_{i=1}^N\sum_{t=1}^TP(Y,X_t=i|\lambda^{(k)})\ln B_{iY_t}</script><p>注意到当且仅当$j=Y<em>t$时该式对$B</em>{ij}$求偏导才不为0，因此需要引入指示函数</p>
+<script type="math/tex; mode=display">
+I(j,Y_t)=\begin{cases}1,\quad j=Y_t\\0, \quad j\neq Y_t\end{cases}</script><p>同理由$\sum<em>{i=1}^MB</em>{ij}=1$根据拉格朗日乘子法得</p>
+<script type="math/tex; mode=display">
+B_{ij}^{(k+1)}=\frac{\sum_{t=1}^TP(Y,X_t=i|\lambda^{(k)})I(j,Y_t)}{\sum_{t=1}^T P(X_t=i,Y|\lambda^{(k)})}</script></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/03/13/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/">https://niiickz.github.io/2023/03/13/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/17/%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%9A%8F%E6%9C%BA%E5%9C%BAMRF%E5%92%8C%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BACRF/" title="马尔可夫随机场MRF和条件随机场CRF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">马尔可夫随机场MRF和条件随机场CRF</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Auto-Encoding Variational Bayes论文解读</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">隐马尔科夫模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">前后向算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Viterbi%E7%AE%97%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">Viterbi算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Baum-Welch%E7%AE%97%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">Baum-Welch算法</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

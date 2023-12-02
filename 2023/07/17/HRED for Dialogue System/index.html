@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>HRED for Dialogue System | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="相关论文：  A Hierarchical Recurrent Encoder-Decoder for Generative Context-Aware Query Suggestion 首次提出HRED，用于Web Query Suggestion  Building End-to-End Dialogue Systems Using Generative Hierarchical Neural">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HRED for Dialogue System">
+<meta property="og:url" content="https://niiickz.github.io/2023/07/17/HRED%20for%20Dialogue%20System/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="相关论文：  A Hierarchical Recurrent Encoder-Decoder for Generative Context-Aware Query Suggestion 首次提出HRED，用于Web Query Suggestion  Building End-to-End Dialogue Systems Using Generative Hierarchical Neural">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-07-17T12:32:08.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.196Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/07/17/HRED%20for%20Dialogue%20System/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'HRED for Dialogue System',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">HRED for Dialogue System</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-07-17T12:32:08.000Z" title="Created 2023-07-17 20:32:08">2023-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.196Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="HRED for Dialogue System"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>相关论文：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1507.02221.pdf">A Hierarchical Recurrent Encoder-Decoder for Generative Context-Aware Query Suggestion</a></p>
+<p>首次提出HRED，用于Web Query Suggestion</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ojs.aaai.org/index.php/AAAI/article/view/9883">Building End-to-End Dialogue Systems Using Generative Hierarchical Neural Network Models</a></p>
+<p>将HRED引入Dialogue Syetem领域，建立端到端模型</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ojs.aaai.org/index.php/AAAI/article/view/10983">A Hierarchical Latent Variable Encoder-Decoder Model for Generating Dialogues</a></p>
+<p>VHRED，使用VAE思想，利用隐变量传递高层次信息，增强生成多样性</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1906.07429.pdf">Modeling Semantic Relationship in Multi-turn Conversations with Hierarchical Latent Variables</a></p>
+<p>CSRR，与VHRED类似，使用VAE用一个隐变量概括discourse-level信息</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ojs.aaai.org/index.php/AAAI/article/view/11965">Hierarchical Recurrent Attention Network for Response Generation</a></p>
+<p>HRAN，为HRED引入Attention机制</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1907.05339.pdf">ReCoSa: Detecting the Relevant Contexts with Self-Attention for Multi-turn Dialogue Generation</a></p>
+<p>ReCoSa，用Self-Attention替代RNN with attention</p>
+</li>
+</ul>
+<h2 id="问题定义"><a href="#问题定义" class="headerlink" title="问题定义"></a>问题定义</h2><p>我们以Dialogue System为例来说明HRED，几篇论文使用的符合都不相同，此处先统一定义</p>
+<p>一个dialogue由来自两个说话人的$N$段utterance组成，即$D={U_1,…,U_N}$</p>
+<p>每个$U<em>n$包括$T_n$个token，即$U_n={w</em>{n,1},…,w_{n,T_n}}$，每个token可能是字词，也可能是标点</p>
+<p>Dialogue System的目标是根据历史对话$U<em>1,…,U</em>{n-1}$生成下一个utterance $U<em>n$，即建模$P</em>{\theta}(w<em>{n,m}|w</em>{n,&lt;m},U_{&lt;n})$</p>
+<h2 id="HRED"><a href="#HRED" class="headerlink" title="HRED"></a>HRED</h2><p>与传统的seq2seq问题（例如机器翻译）不同，seq2seq只需要考虑当前输入的句子，而Dialogue System还需要考虑历史对话（历史输入输出），也即<strong>上下文context</strong></p>
+<p>HRED (Hierarchical Recurrent Encoder-Decoder) 的引入就是为了解决对context建模的问题</p>
+<p>HRED仍然是Encoder-Decoder结构，包含三部分</p>
+<p><strong>Encoder RNN：</strong>encoder第一层，将$U_1,…,U_n$<strong>分别编码为utterance vector</strong>$h^{enc}_1,…,h^{enc}_n$</p>
+<p><strong>Context RNN：</strong>encoder第二层，将<strong>utterance vector序列 $h^{enc}_1,…,h^{enc}_n$ 编码为一个context vector</strong> $h^{con}_n$</p>
+<p><strong>Decoder RNN：</strong>decoder将上一个句子的utterance vector $h<em>n^{enc}$ 作为initial state，将context vector $h^{con}_n$ 与每个word embedding拼接后作为输入，生成$U</em>{n+1}$</p>
+<p><img src="D:\code\cloud\blog\img\HRED.png" alt="HRED"></p>
+<h2 id="VHRED"><a href="#VHRED" class="headerlink" title="VHRED"></a>VHRED</h2><p>对于Dialogue Sytem，传统的Encoder-Decoder和HRED都存在一个问题——生成的对话<strong>缺乏多样性</strong></p>
+<p>其原因是<strong>decoder以扁平的、序列化的方式生成下一个token</strong>（flat sequential generation process） ，也即每个单词的生成只条件依赖之前的单词，其直接表现就是模型<strong>倾向于生成短的安全回答</strong></p>
+<p>VHRED (Latent Variable Hierarchical Recurrent Encoder-Decoder) 的思想是为每个utterance $n=1,…,N$引入一个隐变量$z_n\in R^{d_z}$，生成$U_n$时使用如下的两级生成</p>
+<script type="math/tex; mode=display">
+P_{\theta}(z_n|U_{<n})=\mathcal N(\mu_{prior}(U_{<n}),\Sigma_{prior}(U_{<n}))\\
+P_{\theta}(U_n|z_n,U_{<n})=\prod_{m=1}^{M_n}P_{\theta}(w_{n,m}|z_n,U_{<n},w_{n,<m})</script><p>其中$\mu\in R^{d_z}, \Sigma \in R^{d_z\times d_z}$且$\Sigma$为对角阵</p>
+<p>通过将context vector $h<em>n^{con}$输入一个两层前馈网络，然后应用两个不同的矩阵乘，可以分别获得$\mu</em>{prior},\Sigma_{prior}$（注意$\Sigma$需要一个softplus激活保证为正数）</p>
+<p>我们可以通过优化<strong>变分下界</strong>学习后验$Q<em>{\psi}(z_n|U</em>{&lt; n}, U<em>n)$，以此近似$P</em>{\theta}(z<em>n|U</em>{&lt;n})$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}&\log P_\theta(U_1,\ldots,U_N)\\&\geq\sum_{n=1}^N-\mathrm{KL}\left[Q_\psi(z_n\mid U_1,\ldots,U_n)||P_\theta(z_n\mid U_{<n})\right]\\&+E_{Q_\psi\left(z_n\mid U_1,\ldots,U_n\right)}\left[\log P_\theta(U_n\mid z_n,U_{<n})\right],\end{aligned}</script><p>具体来说，在<strong>训练阶段</strong>，将context vector $h<em>n^{con}$ 与utterance vector $h</em>{n+1}^{enc}$ 拼接后输入一个两层前馈网络，然后应用两个不同的矩阵乘分别获得$\mu<em>{posterior},\Sigma</em>{posterior}$，并使用其采样$z_n$</p>
+<p>而在<strong>测试阶段</strong>，则使用$\mu<em>{prior},\Sigma</em>{prior}$采样$z_n$</p>
+<p>VHRED的思路和VAE很相似，相当于对历史utterance进行压缩再重建</p>
+<p>$z_n$可以为decoder提供话题、情感、目标等多种高层信息，因此显著提高了生成的丰富性</p>
+<p><img src="D:\code\cloud\blog\img\VHRED.png" alt="VHRED"></p>
+<h2 id="HRAN"><a href="#HRAN" class="headerlink" title="HRAN"></a>HRAN</h2><p>HRED和VHRED都专注于对context层级进行建模，而没有对<strong>历史对话中不同utterance的重要性</strong>进行建模，容易想到可以引入<strong>attention机制</strong>来解决这个问题，于是Xing et al.提出了HRAN (Hierarchical Recurrent Attention Network)</p>
+<p>HRAN的结构如图所示，假设当前decoder正在生成第$n$个utterance的第$t$个token $w_{n,t}$</p>
+<p><strong>Word Level Encoder</strong>：使用双向GRU，将每个$U<em>i=(w</em>{i,1},…,w<em>{i,T_i}),\ i=1,2,…,n-1$分别编码为隐状态序列$h_i=(h</em>{i,1},…,h<em>{i,T_i})$，使用attention分别计算其加权和 $r^t_i=\sum</em>{j=1}^{T<em>i}\alpha^t</em>{i,j}h_{i,j}$</p>
+<p><strong>Utterance Level Encoder：</strong>使用逆向GRU，以序列$r^t=(r^t<em>1,…,r^t</em>{n-1})$作为输入，输出隐状态序列$l^t=(l^t<em>1,…,l^t</em>{n-1})$，再次使用attention计算加权和 $c<em>t=\sum</em>{j=1}^{n-1}\beta^t<em>{j}l^t</em>{j}$</p>
+<p><strong>Decoder：</strong>将$c<em>t$与$w</em>{n,t-1}$的embedding进行拼接作为输入，生成$w<em>{n,t}$的预测值$s</em>{n,t}$</p>
+<p>其中对Utterance Level Encoder的attention权重矩阵仅由Decoder的隐状态序列确定，与普通attention一致</p>
+<p>对Word Level Encoder的attention略有不同，其<strong>权重矩阵由Utterance Level Encoder和Decoder共同决定</strong>，具体地，我们需要拼接相应隐状态$h,l,s$并输入一个MLP，并通过softmax激活得到权重矩阵</p>
+<p><img src="D:\code\cloud\blog\img\HRAN.png" alt="HRAN"></p>
+<h2 id="ReCoSa"><a href="#ReCoSa" class="headerlink" title="ReCoSa"></a>ReCoSa</h2><p>Transformer中self-attention的成功启发了很多新研究，而ReCoSa (Relevant Context Self-Attention Model) 就是将其引入到Dialogue System的成果</p>
+<p>相较于HRAN，使用self-attention机制的ReCoSa<strong>能更好地捕捉到长距离依赖信息</strong></p>
+<p>如图所示，ReCoSa包含三个部分</p>
+<ul>
+<li><p><strong>Context Representation Encoder</strong>：</p>
+<p>先使用LSTM将每个历史utterance $U<em>1,…,U</em>{n}$分别编码为utterance vector $h<em>1,…,h</em>{n}$，并将其与position embedding进行拼接得到${(h_1,P_1),…,(h_n,P_n)}$</p>
+<p>然后使用multi-head attention进行self-attention处理（即Q=K=V），最后经过一个MLP得到context representation</p>
+</li>
+<li><p><strong>Response Representation Encoder</strong>：</p>
+<p>将相应的应答$U_{n+1}$与position embedding相加，经过self-attention得到response representation</p>
+<p>特别的，训练时需要使用future mask，防止self-attention注意到未来的信息</p>
+</li>
+<li><p><strong>Context-Response Attention Decoder</strong>：</p>
+<p>令$K=V$为context representation，$Q$为response representation，进行multi-head attention处理，最后经过MLP并softmax激活得到输出</p>
+</li>
+</ul>
+<p>容易看出来其整体就是Transformer的结构</p>
+<p><img src="D:\code\cloud\blog\img\ReCoSa.png" alt="ReCoSa"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/07/17/HRED%20for%20Dialogue%20System/">https://niiickz.github.io/2023/07/17/HRED%20for%20Dialogue%20System/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/07/30/Pytorch%E4%B8%AD%E7%9A%84Margin%20Loss/" title="Pytorch中的Margin Loss"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Pytorch中的Margin Loss</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/25/DDPM%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/" title="DDPM论文浅析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">DDPM论文浅析</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">问题定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HRED"><span class="toc-number">2.</span> <span class="toc-text">HRED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VHRED"><span class="toc-number">3.</span> <span class="toc-text">VHRED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HRAN"><span class="toc-number">4.</span> <span class="toc-text">HRAN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ReCoSa"><span class="toc-number">5.</span> <span class="toc-text">ReCoSa</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

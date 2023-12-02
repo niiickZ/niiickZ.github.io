@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ViT——Vision Transformer论文解读 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="论文地址：An Image is Worth 16X16 Words-Transformers for Image Recognition at Scale Introduction基于self-attention的Transformer系模型已经逐渐成为NLP领域的首选 其主要方法是在大语料库上进行预训练并在特定任务的小数据集上进行微调 得益于Transformer的高效性和可扩展性，前所未有的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ViT——Vision Transformer论文解读">
+<meta property="og:url" content="https://niiickz.github.io/2023/04/23/ViT%E2%80%94%E2%80%94Vision%20Transformer%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="论文地址：An Image is Worth 16X16 Words-Transformers for Image Recognition at Scale Introduction基于self-attention的Transformer系模型已经逐渐成为NLP领域的首选 其主要方法是在大语料库上进行预训练并在特定任务的小数据集上进行微调 得益于Transformer的高效性和可扩展性，前所未有的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-04-23T06:06:14.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.224Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/04/23/ViT%E2%80%94%E2%80%94Vision%20Transformer%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ViT——Vision Transformer论文解读',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ViT——Vision Transformer论文解读</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-04-23T06:06:14.000Z" title="Created 2023-04-23 14:06:14">2023-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.224Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ViT——Vision Transformer论文解读"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>论文地址：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2010.11929.pdf">An Image is Worth 16X16 Words-Transformers for Image Recognition at Scale</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>基于self-attention的Transformer系模型已经逐渐成为NLP领域的首选</p>
+<p>其主要方法是在大语料库上进行预训练并在特定任务的小数据集上进行微调</p>
+<p>得益于Transformer的高效性和可扩展性，前所未有的大模型训练成为可能，并且仍没有饱和的迹象</p>
+<p>在CV领域，一些研究受到Transformer的启发而尝试将self-attention与CNN结合或完全移除CNN，但这些研究使用的特制的attention模式导致其不能有效利用硬件加速器</p>
+<p>因此，在大尺度图像识别中，传统的类ResNet模型仍是state of the art</p>
+<p>综上所述，这篇论文的目的就是对<strong>标准Transformer能否直接应用于图像</strong>进行试验，称为<strong>Vision Transformer, ViT</strong></p>
+<p>具体来说，论文中直接将图片分为多个patch，并将这些patch的embedding序列直接作为ViT输入，也即直接将图像patch当作NLP应用中的token对待</p>
+<p>实验结果是，在中等大小数据集（如ImageNet）上，ViT比ResNet低了几个百分点的准确率，但在大数据集上，ViT取得了非常好的效果</p>
+<h2 id="Vision-Transformer"><a href="#Vision-Transformer" class="headerlink" title="Vision Transformer"></a>Vision Transformer</h2><p>ViT的结构如下图所示</p>
+<p>Transformer原本接受的是1D输入，为了处理2D图像，首先将图像$x\in R^{H\times W\times C}$转为为<strong>展平的patch的序列</strong>$x_p\in R^{N\times(P^2\cdot C)}$，其中$(P,P)$是每个patch的分辨率，且$N=HW/P^2$是patch个数，也是输入序列长度</p>
+<p>之后用一个线性全连接层将patch序列映射到$D$维，即$shape=(N, D)$，称其为<strong>patch embedding</strong></p>
+<p>与BERT的[CLS] token类似，patch embedding序列前面加入一个可学习的embedding $z<em>0^0=x</em>{class}$，其对应的Transformer输出$z^0_L$用于继续输入MLP做分类</p>
+<p>patch embedding还需要与position embedding相加，论文使用了1D position embedding，因为实验结果表明<strong>2D position embedding相比1D并没有什么效果提升</strong></p>
+<p><img src="G:\code\cloud\blog\img\ViT.png" alt="ViT"></p>
+<p>相比CNN，<strong>ViT的归纳偏好更少</strong></p>
+<p>CNN中，局部性、二维邻域结构、平移等变形等固化在整个模型的每一层（翻译不一定准确，见以下原文）</p>
+<blockquote>
+<p>In CNNs, locality, two-dimensional neighborhood structure, and translation equivariance are baked into each layer throughout the whole model</p>
+</blockquote>
+<p>而在ViT中，只有MLP层具有局部性和平移等变形，而self-attention是全局的</p>
+<p>对于二维邻域结构，ViT只在分割patch时和fine-tune中调整positon-embedding时使用</p>
+<p>对于fine-tuning，ViT可以处理任意长的序列（也即任意大分辨率的图像），但这样预训练的positon-embedding就会变得没有意义，因此需要<strong>根据patch在原图像中的位置对预训练的positon-embedding进行2D插值</strong>，也即引入了二维邻域结构</p>
+<p>此外，ViT的原始图片输入也可以替换为CNN的特征图输入，构成一个混合模型（Hybrid Architecture）</p>
+<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h3 id="Datasets-amp-Model-Variants"><a href="#Datasets-amp-Model-Variants" class="headerlink" title="Datasets &amp; Model Variants"></a>Datasets &amp; Model Variants</h3><p>为了测试模型可扩展性，论文使用以下几个不同大小的数据集进行预训练</p>
+<ul>
+<li><p>ILSVRC-2012 ImageNet：图像数1.3M，类别数1k</p>
+</li>
+<li><p>ImageNet-21k：ImageNet的超集，图像数14M，类别数21k</p>
+</li>
+<li><p>JFT：图像数303M（高分辨率），类别数18k</p>
+</li>
+</ul>
+<p>进行迁移的下游benchmark如下，预处理方法与BiT论文相同</p>
+<ul>
+<li>ImageNet原始验证labels和经过清洗的ReaL labels</li>
+<li>CIFAR-10/100</li>
+<li>Oxford-IIIT Pets</li>
+<li>Oxford Flowers-102</li>
+</ul>
+<p>此外还有google的VTAB，用于评估<strong>低数据量下不同任务的迁移学习</strong>，每个下游任务只有1000个样本</p>
+<p>VTAB有19个任务，可以分为三类：1.自然图像：例如上述数据集 2. 专业图像：例如医药或卫星图像 3.结构化图像：需要几何理解，例如定位</p>
+<p>测试的ViT模型如下图所示，Base和Large基于BERT的配置，Huge是新增的更大的模型</p>
+<p>后面用简记形式表示不同模型，例如ViT-L/16表示Large模型，输入patch尺寸为16×16</p>
+<p>注意Transformer的输入序列长度与patch尺寸平方成反比，因此<strong>patch尺寸越小的模型计算成本越高</strong></p>
+<p><img src="G:\code\cloud\blog\img\ViT_config.png" alt="ViT_config"></p>
+<h3 id="Comparison-to-SOTA"><a href="#Comparison-to-SOTA" class="headerlink" title="Comparison to SOTA"></a>Comparison to SOTA</h3><p>Table 2展示了在JFT上预训练的ViT与SOTA模型（BiT和Noisy Student）的对比</p>
+<p>可以明显发现ViT-L/16已经在所有任务上打败了SOTA模型，而且更大的ViT-H/14甚至能有进一步提升</p>
+<p>此外表中TPUv3-core-days表示TPUv3核心数与训练天数的乘积，可以发现ViT相较SOTA需要少很多的计算资源</p>
+<p><img src="G:\code\cloud\blog\img\ViT_SOTA.png" alt="ViT_SOTA"></p>
+<h3 id="Data-Requirements"><a href="#Data-Requirements" class="headerlink" title="Data Requirements"></a>Data Requirements</h3><p>比较有趣的是，ViT在较小的数据集上表现不如SOTA，只有在大数据集上ViT才能展现出其实力</p>
+<p>如fig3所示，数据集大小从ImageNet、ImageNet-21K到JFT-300M依次递增，可以看到在ImageNet上ViT表现都低于BiT，ViT-Large甚至低于ViT-Base，而在ImageNet-21K上，几个模型表现相近，在JFT上则ViT完胜</p>
+<p>fig4是不同大小的JFT子集上进行预训练的结果，纵轴为 linear few-shot accuracy，从其中可得到同样结果</p>
+<p>这些结果证实了一个直觉：CNN的归纳偏好对小数据集更有用，但对于大数据集，直接从数据中学习相关模式更有效</p>
+<p><img src="G:\code\cloud\blog\img\ViT_fig34.png" alt="ViT_fig3"></p>
+<h2 id="Scaling-Study"><a href="#Scaling-Study" class="headerlink" title="Scaling Study"></a>Scaling Study</h2><p>fig5展示了对ViT模型缩放的研究</p>
+<p>可以发现ViT使用了小2~4x计算成本就达到了与ResNet相近的迁移效果</p>
+<p>此外混合模型在小计算量上略微超过了ViT，但在大模型上却还是ViT更优秀，而且ViT并没有随数据增大而饱和的迹象</p>
+<p><img src="G:\code\cloud\blog\img\ViT_fig5.png" alt="ViT_fig5"></p>
+<h3 id="Inspecting-ViT"><a href="#Inspecting-ViT" class="headerlink" title="Inspecting ViT"></a>Inspecting ViT</h3><p>为理解ViT如何处理图像数据，论文还研究了ViT的内部图像表示</p>
+<p>fig7左图展示的是patch embedding后的图像，论文这句结论不太会翻译</p>
+<blockquote>
+<p>The components resemble plausible basis functions for a low-dimensional representation of the fine structure within each patch</p>
+</blockquote>
+<p>fig7中间图展示的是patch embedding与position embedding相加的结果，其中可以很明显的看见2D位置信息，这也是为什么之前说2D position embedding并没有比1D好，因为1D已经学得了很好的表达</p>
+<p>论文附录还展示了更大分辨率图像position embedding之后的特征图，其中还可以看到明显的正弦结构</p>
+<p>通过一层的attention权重矩阵可以得到该层在整个图像空间上的平均attention距离，attention可以与CNN的感受野类比，fig7右图展示的就是不同深度的层与平均attention距离的关系</p>
+<p>可以看到即使是低层，一些attention head也已经注意到了几乎整个图像</p>
+<p>论文的fig6还将ViT在图像上attention到的部分做了可视化，可以明显看到attention部分都是与分类任务语义相关的区域</p>
+<p>最后，论文还尝试了与BERT类似的无监督预训练，即masked path预测，但结果并不如有监督预训练</p>
+<p><img src="G:\code\cloud\blog\img\ViT_fig7.png" alt="ViT_fig7"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/04/23/ViT%E2%80%94%E2%80%94Vision%20Transformer%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">https://niiickz.github.io/2023/04/23/ViT%E2%80%94%E2%80%94Vision%20Transformer%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/27/SimCLR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="SimCLR论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">SimCLR论文解读</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/20/EfficientNet%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="EfficientNet论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">EfficientNet论文解读</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vision-Transformer"><span class="toc-number">2.</span> <span class="toc-text">Vision Transformer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Datasets-amp-Model-Variants"><span class="toc-number">3.1.</span> <span class="toc-text">Datasets &amp; Model Variants</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Comparison-to-SOTA"><span class="toc-number">3.2.</span> <span class="toc-text">Comparison to SOTA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Requirements"><span class="toc-number">3.3.</span> <span class="toc-text">Data Requirements</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scaling-Study"><span class="toc-number">4.</span> <span class="toc-text">Scaling Study</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Inspecting-ViT"><span class="toc-number">4.1.</span> <span class="toc-text">Inspecting ViT</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

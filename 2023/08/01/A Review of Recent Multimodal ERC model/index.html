@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>A Review of Recent Multimodal ERC model | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这篇文章简述了21~23年的一些有代表性的Multimodal ERC (Multimodal Emotion Recognition in Conversation) 模型，它们的共同点是都基于GNN (Graph Neural Network) 为方便描述，这里先做一个统一的符号定义 一段对话由$N$个utterance ${u_1,\cdots,u_N}$组成，每个$u_i$包含听觉、视觉、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Review of Recent Multimodal ERC model">
+<meta property="og:url" content="https://niiickz.github.io/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这篇文章简述了21~23年的一些有代表性的Multimodal ERC (Multimodal Emotion Recognition in Conversation) 模型，它们的共同点是都基于GNN (Graph Neural Network) 为方便描述，这里先做一个统一的符号定义 一段对话由$N$个utterance ${u_1,\cdots,u_N}$组成，每个$u_i$包含听觉、视觉、">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-08-01T12:57:34.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.174Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'A Review of Recent Multimodal ERC model',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">A Review of Recent Multimodal ERC model</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-08-01T12:57:34.000Z" title="Created 2023-08-01 20:57:34">2023-08-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.174Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="A Review of Recent Multimodal ERC model"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>这篇文章简述了21~23年的一些有代表性的Multimodal ERC (Multimodal Emotion Recognition in Conversation) 模型，它们的共同点是都基于<strong>GNN</strong> (Graph Neural Network)</p>
+<p>为方便描述，这里先做一个统一的符号定义</p>
+<p>一段对话由$N$个utterance ${u_1,\cdots,u_N}$组成，每个$u_i$包含听觉、视觉、文本三个模态，记为$u_i={u_i^a,u_i^v,u_i^t}$，其中$u_i^a\in R^{d_a},u_i^v\in R^{d_v},u_i^t\in R^{d_t}$分别为已提取的听觉、视觉、文本特征，每个$u_i$对应一个情感标签$y_i$</p>
+<p>每段对话包含$M$个speaker ${p<em>1,\cdots,p_M}$，$p</em>{\phi(u<em>i)}$表示$u_i$对应的speaker，$U</em>{\lambda}$（或$U^{(\lambda)}$）表示来自$p_{\lambda}$的utterance集合</p>
+<h2 id="MMGCN"><a href="#MMGCN" class="headerlink" title="MMGCN"></a>MMGCN</h2><p>MMGCN——Multimodal Fused Graph Convolutional Network</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2107.06779.pdf">Hu J, Liu Y, Zhao J, et al. Mmgcn: Multimodal fusion via deep graph convolution network for emotion recognition in conversation[J]. arXiv preprint arXiv:2107.06779, 2021.</a></p>
+<p><strong>Motivation：</strong>先前的RNN-based模型不能有效捕捉长距离信息和复杂的语境关系，而DialogueGCN展现了GNN在ERC中的潜力，因此提出MMGCN使用GNN处理多模态ERC</p>
+<p><strong>Method：</strong></p>
+<p>Modality Encoder模块分别使用LSTM和全连接网络对文本、听觉/视觉特征进一步编码，结果记为$h_i={h_i^a,h_i^v,h_i^t}$</p>
+<p>Speaker Embedding模块用于用于编码speaker信息，记$s_i\in R^m$为表示speaker的one-hot向量，则Speaker Embedding为$S_i=W_ss_i+b_i^s$</p>
+<p>MMGCN按如下方式建图</p>
+<p>每个utterance由三个节点$v_i^a,v_i^v,v_i^t$表示，初始特征分别为$h_i^{‘a}=[h_i^a,S_i],h_i^{‘v}=[h_i^v,S_i],h_i^{‘t}=[h_i^t,S_i]$</p>
+<p>边有两种类型：(1) 模态相同的两节点间建边，边权为$A<em>{ij}=1-\frac{\arccos(sim(n_i,n_j))}{\pi}$；(2) 同一utterance的不同模态的节点间建边，边权为$A</em>{ij}=\gamma(1-\frac{\arccos(sim(n_i,n_j))}{\pi})$</p>
+<p>其中$sim()$为余弦相似度，$\gamma$为超参，边均为<strong>无向边</strong></p>
+<p>图的处理采用GCN，为了加深深度，MMGCN采用residual connection的思想将$H^{(0)}$连接到每层GCN，表达式为</p>
+<script type="math/tex; mode=display">
+\mathcal{H}^{(l+1)}=\sigma(((1-\alpha)\tilde{\mathcal{P}}\mathcal{H}^{(l)}+\alpha\mathcal{H}^{(0)})((1-\beta^{(l)})\mathcal{I}+\beta^{(l)}\mathcal{W}^{(l)}))</script><p>其中$\tilde{\mathcal{P}}=\mathbf{\tilde{D}}^{-\frac{1}{2}}\mathbf{\tilde{A}}\mathbf{\tilde{D}}^{\frac{1}{2}}$</p>
+<p>最后将GCN的输入和输出进行拼接$e_i=[h_i’,g_i]$，输入MLP层进行分类</p>
+<p><img src="D:\code\cloud\blog\img\MMGCN.png" alt="MMGCN"></p>
+<h2 id="MM-DFN"><a href="#MM-DFN" class="headerlink" title="MM-DFN"></a>MM-DFN</h2><p>MM-DFN——Multimodal Dynamic Fusion Network</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2107.06779.pdf">Hu J, Liu Y, Zhao J, et al. Mmgcn: Multimodal fusion via deep graph convolution network for emotion recognition in conversation[J]. arXiv preprint arXiv:2107.06779, 2021.</a></p>
+<p><strong>Motivation：</strong>认为先前的GNN模型在多模态融合过程中容易积累冗余信息，因此借鉴LSTM将门控思想加入GNN</p>
+<p><strong>Method：</strong></p>
+<p>Context Embedding模块分别使用BiGRU和全连接网络对文本、听觉/视觉进行编码，结果记为$c_i={c_i^a,c_i^v,c_i^t}$</p>
+<p>Speaker Embedding使用BiGRU编码speaker信息，表达式为</p>
+<script type="math/tex; mode=display">
+\mathbf{s}_i^\delta,\mathbf{h}_{\lambda,j}^s=\overleftrightarrow{GRU}_s(\mathbf{u}_i^\delta,\mathbf{h}_{\lambda,j-1}^s),j\in[1,|U_\lambda|],\delta\in\{a,v,t\}</script><p>MMDFN的建图方式与MGCN基本一致</p>
+<p>每个utterance对应于表示三个模态的三个节点，初始特征分别为$x_i^{\delta}=c_i^{\delta}+\gamma^{\delta}s_i^{\delta},\delta\in{a,v,t}$</p>
+<p>然后模态相同的两节点间建边， 同一utterance的不同模态的节点间建边，边权均为$A_{ij}=1-\frac{\arccos(sim(n_i,n_j))}{\pi}$</p>
+<p>MMDFN将LSTM的门控思想加入到了GCN中，表达式为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\boldsymbol{\Gamma}_{\varepsilon}^{(k)} & =\sigma\left(\mathbf{W}_{\varepsilon}^{g} \cdot\left[\mathbf{g}^{(k-1)}, \mathbf{H}^{\prime(k-1)}\right]+\mathbf{b}_{\varepsilon}^{g}\right), \varepsilon=\{u, f, o\} \\
+\tilde{\mathbf{C}}^{(k)} & =\tanh \left(\mathbf{W}_{C}^{g} \cdot\left[\mathbf{g}^{(k-1)}, \mathbf{H}^{\prime(k-1)}\right]+\mathbf{b}_{C}^{g}\right) \\
+\mathbf{C}^{(k)} & =\boldsymbol{\Gamma}_{f}^{(k)} \odot \mathbf{C}^{(k-1)}+\boldsymbol{\Gamma}_{u}^{(k)} \odot \tilde{\mathbf{C}}^{(k)}\\
+\mathbf{g}^{(k)}&=\boldsymbol{\Gamma}_{o}^{(k)} \odot \tanh \left(\mathbf{C}^{(k)}\right)
+\end{aligned}</script><p>其中$\boldsymbol{\Gamma}<em>{u}^{(k)},\boldsymbol{\Gamma}</em>{f}^{(k)},\boldsymbol{\Gamma}_{o}^{(k)}$分别为更新门、遗忘门和输出门</p>
+<p>多层GCN的堆叠方式与MMGCN相同</p>
+<script type="math/tex; mode=display">
+\mathcal{H}^{(k+1)}=\sigma(((1-\alpha)\tilde{\mathcal{P}}\mathcal{H}^{\prime(k)}+\alpha\mathcal{H}^{(0)})((1-\beta^{(k)})\mathcal{I}+\beta^{(k)}\mathcal{W}^{(k)}))</script><p>其中$\mathbf{H}^{\prime(k)}=\mathbf{H}^{\prime(k)}+\mathbf{g}^{k}$</p>
+<p>最后的分类层同样是将GCN输入输出进行拼接后输入MLP</p>
+<p><img src="D:\code\cloud\blog\img\MMDFN.png" alt="MMDFN"></p>
+<h2 id="COGMEN"><a href="#COGMEN" class="headerlink" title="COGMEN"></a>COGMEN</h2><p>COGEM——COntextualized GNN based Multimodal Emotion recognitioN</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2205.02455.pdf">Joshi A, Bhat A, Jain A, et al. COGMEN: COntextualized GNN based multimodal emotion recognitioN[J]. arXiv preprint arXiv:2205.02455, 2022.</a></p>
+<p><strong>Motivation：</strong>尝试用Transformer和GraphTransformer捕捉更丰富的信息，具体来说，编码阶段用Transformer Encoder代替先前的序列模型，更有效地捕捉全局信息；图处理阶段依次用RGCN和GraphTransformer进行处理，有效捕捉局部信息</p>
+<p><strong>Method：</strong></p>
+<p>Context Extractor将每个$u_i$对应的三个模态特征进行拼接得到$x_i=concat(u_i^a,u_i^v,u_i^t)$，并使用Transformer Encoder处理$x_i$序列得到每个utterance的特征$z_i$</p>
+<p>之后按如下方式建图</p>
+<p>每个utterance作为一个节点，初始特征为$z_i$</p>
+<p>建边方法及边的关系集合与DialogueGCN一致：采用<strong>窗口法</strong>建边，每个$u_i$只与过去的$p$个及未来的$f$个utterance相连；关系有两大类，speaker两两之间构成一个关系，某条边的出点$u_i$和入点$u_j$的相对位置构成一个关系，共$2M^2$种不同关系</p>
+<p>例如，假设对话只有2个speaker，令$U^{S_i}={u^{S_i}_1,\cdots\,u^{S_i}_n}$表示第$i$个speaker的utterance集合，对于$u^{S_1}_i$则有如下的边</p>
+<p>这些边可视为建模了两类依赖：(1)  $R<em>{intra}\in {U^{S_i}\to U^{S_i}}$用于建模intra-speaker依赖 (2) $R</em>{inter}\in {U^{S_i}\to U^{S_j}},i\neq j$用于建模inter-speaker依赖</p>
+<p>COGMEN依次使用RGCN和GraphTransformer对构建的图进行处理，最后再输入MLP层进行分类</p>
+<p><img src="D:\code\cloud\blog\img\COGMEN.png" alt="COGMEN"></p>
+<h2 id="GCNet"><a href="#GCNet" class="headerlink" title="GCNet"></a>GCNet</h2><p>GCNet——Graph Completion Network</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.02177.pdf">Lian Z, Chen L, Sun L, et al. GCNet: graph completion network for incomplete multimodal learning in conversation[J]. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2023.</a></p>
+<p><strong>Motivation：</strong>处理现实中输入模态缺失问题</p>
+<p><strong>method：</strong></p>
+<p>假设训练数据集是模态完整的，为模拟模态缺失场景，首先对训练集中每个$u_i$进行随机模态丢弃，但保证每个$u_i$至少有一个可用模态，其中确实模态为全0向量</p>
+<p>将每个$u_i$的三个模态特征进行拼接，并使用BiLSTM进行编码，得到$h_1,\cdots,h_N$作为图节点的初始特征</p>
+<p>边的构建同样采用窗口法，每个节点$u_i$只与前后$w$个utterance相连</p>
+<p>GCNet只构建一个图，但定义两个不同的关系集和，分别使用两个不同的RGCN进行处理</p>
+<p>第一个RGCN称为Speaker GNN (SGNN) ，用于建模speaker dependency，speaker两两之间的连边构成其上的关系集和，共$M^2$种，例如边$e<em>{ij}$的关系类型为$(p</em>{\phi(u<em>i)},p</em>{\phi(u_j)})$</p>
+<p>第一个RGCN称为Temporal GNN (TGNN) ，用于建模temporal dependency，其上的关系集和为${past,present,future}$，用于表明边的出点和入点的相对位置关系</p>
+<p>容易看出其实关系类型还是DialogueGCN的做法</p>
+<p>记SGNN和TGNN节点$i$的输出分别为$z_i,g_i$，GCNet对$h_i,z_i,g_i$进行拼接并输入BiLSTM进行处理得到$q_i$</p>
+<p>特别的，为了有效建模缺失的模态，GCNet使用了同时使用了交叉熵损失和<strong>重建损失</strong>，其中重建损失表示为</p>
+<script type="math/tex; mode=display">
+L_{recon}=\sum_{m\in \{a,v,t\}}\frac{1}{L}\sum_{i=1}^L\frac{1}{d_m}\|(1-\lambda_i^{m})(\hat{u_i}^m-u_i^m)\|^2</script><p>其中$\lambda$表示模态是否缺失，$\lambda=1$是表示未确实，$\lambda=0$表示缺失，因此重建损失只评价确实模态的重建</p>
+<p><img src="D:\code\cloud\blog\img\GCNet.png" alt="GCNet"></p>
+<h2 id="M-3Net"><a href="#M-3Net" class="headerlink" title="M^3Net"></a>M^3Net</h2><p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/CVPR2023/html/Chen_Multivariate_Multi-Frequency_and_Multimodal_Rethinking_Graph_Neural_Networks_for_Emotion_CVPR_2023_paper.html">Chen F, Shao J, Zhu S, et al. Multivariate, Multi-Frequency and Multimodal: Rethinking Graph Neural Networks for Emotion Recognition in Conversation[C]//Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2023: 10761-10770.</a></p>
+<p>M^3Net——Multivariate Multi-frequency Multimodal Graph Neural Network</p>
+<p><strong>Motivation：</strong>认为先前的GNN模型对对话中的多元关系和高频信息的利用不足，因此M3Net使用两个GNN分别捕捉multivariate和multi-frequency信息</p>
+<p><strong>method：</strong></p>
+<p>模态特征编码与MMGCN相同，使用LSTM和FC分别对模态特征进行处理，并与speaker embedding相加</p>
+<p><img src="D:\code\cloud\blog\img\M3Net.png" alt="M3Net"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/">https://niiickz.github.io/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/08/02/ChebNet%20and%20GCN/" title="ChebNet and GCN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">ChebNet and GCN</div></div></a></div><div class="next-post pull-right"><a href="/2023/07/31/DialogueGCN/" title="DialogueGCN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">DialogueGCN</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div><div><a href="/2023/08/02/ChebNet%20and%20GCN/" title="ChebNet and GCN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-02</div><div class="title">ChebNet and GCN</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MMGCN"><span class="toc-number">1.</span> <span class="toc-text">MMGCN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MM-DFN"><span class="toc-number">2.</span> <span class="toc-text">MM-DFN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#COGMEN"><span class="toc-number">3.</span> <span class="toc-text">COGMEN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GCNet"><span class="toc-number">4.</span> <span class="toc-text">GCNet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#M-3Net"><span class="toc-number">5.</span> <span class="toc-text">M^3Net</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

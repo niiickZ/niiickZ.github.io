@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>椭圆曲线密码体制 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="由于硬件提升和因子分解算法的发展不断威胁着RSA，最年来RSA密钥位数在不断增加而另一种公钥加密技术——椭圆曲线加密法ECC可以使用短得多的密钥获得与RSA相同的安全性 椭圆曲线基础实数域上的椭圆曲线椭圆曲线并不是椭圆，该名称只是因为其方程与计算椭圆周长的方程相似密码学中我们只考虑椭圆曲线的简化形式  y^2&#x3D;x^3+ax+b除了方程所定义的点外，椭圆曲线还包含一个无穷远点（或称零点）$O$，他们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="椭圆曲线密码体制">
+<meta property="og:url" content="https://niiickz.github.io/2022/11/22/%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="由于硬件提升和因子分解算法的发展不断威胁着RSA，最年来RSA密钥位数在不断增加而另一种公钥加密技术——椭圆曲线加密法ECC可以使用短得多的密钥获得与RSA相同的安全性 椭圆曲线基础实数域上的椭圆曲线椭圆曲线并不是椭圆，该名称只是因为其方程与计算椭圆周长的方程相似密码学中我们只考虑椭圆曲线的简化形式  y^2&#x3D;x^3+ax+b除了方程所定义的点外，椭圆曲线还包含一个无穷远点（或称零点）$O$，他们">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2022-11-22T07:29:59.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.253Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2022/11/22/%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '椭圆曲线密码体制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">椭圆曲线密码体制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-11-22T07:29:59.000Z" title="Created 2022-11-22 15:29:59">2022-11-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.253Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="椭圆曲线密码体制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>由于硬件提升和因子分解算法的发展不断威胁着RSA，最年来RSA密钥位数在不断增加<br>而另一种公钥加密技术——椭圆曲线加密法ECC可以使用短得多的密钥获得与RSA相同的安全性</p>
+<h2 id="椭圆曲线基础"><a href="#椭圆曲线基础" class="headerlink" title="椭圆曲线基础"></a>椭圆曲线基础</h2><h3 id="实数域上的椭圆曲线"><a href="#实数域上的椭圆曲线" class="headerlink" title="实数域上的椭圆曲线"></a>实数域上的椭圆曲线</h3><p>椭圆曲线并不是椭圆，该名称只是因为其方程与计算椭圆周长的方程相似<br>密码学中我们只考虑椭圆曲线的简化形式</p>
+<script type="math/tex; mode=display">
+y^2=x^3+ax+b</script><p>除了方程所定义的点外，椭圆曲线还包含一个<strong>无穷远点</strong>（或称<strong>零点</strong>）$O$，他们共同组成点集$E(a,b)$</p>
+<p>若上述方程中的系数$a,b$满足</p>
+<script type="math/tex; mode=display">
+4a^3+27b^2\neq 0</script><p>则可基于$E(a,b)$定义一个<strong>加群</strong><br>从几何角度定义椭圆曲线上的加法规则为：<strong>若椭圆曲线上三点在一条直线上，则它们的和为</strong>$O$</p>
+<p>根据该加法定义，$E(a,b)$满足如下条件</p>
+<ul>
+<li>加法定义：设$P,Q$为曲线上两个不同点，他们的连线与椭圆曲线交于另一点$R$，则$P+Q=-R$<br>可以证明$R$存在且唯一，除非连线在$P$（或$Q$）点与椭圆曲线相切，此时令$R=P$（或$R=Q$）<br>此外若$P=Q$，则画出该点<strong>切线</strong>找到另一交点$R$，则$P+P=-R$</li>
+<li>单位元：$O$是$E(a,b)$的单位元。对于椭圆曲线上任一点$P$，有$P+O=P$</li>
+<li>负元：若点$P=(x,y)$，则$P$的负元为$-P=(x,-y)$，有$P+(-P)=O$<br>负元的定义可解释为用一条与$x$轴垂直的线连接$P$与$-P$，在无穷远点与椭圆曲线相交</li>
+</ul>
+<p>容易看出$E(a,b)$是<strong>Abel群</strong></p>
+<p><img src="G:\code\cloud\blog\img\elliptic_curve.png" alt="elliptic_curve"></p>
+<p>我们还可以给出实数域上椭圆曲线加法的代数描述</p>
+<p>若$P=(x_P,y_P),Q=(x_Q,y_Q)$为不同点且不互为逆元，则$R=(x_R,y_R)=P+Q$满足</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x_R=\Delta^2-x_P-x_Q\\
+y_R=-y_R+\Delta(x_P-x_R)
+\end{cases}</script><p>其中$\Delta=\frac{y_Q-y_P}{x_Q-x_P}$为$P,Q$连线的斜率</p>
+<p>若$P=Q$且$y_P\neq0$，则有</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x_R=(\frac{3x_P^2+a}{2y_P})^2-2x_P\\
+y_R=-(\frac{3x_P^2+a}{2y_P})(x_P-x_R)-y_P
+\end{cases}</script><h3 id="GF-p-上的椭圆曲线"><a href="#GF-p-上的椭圆曲线" class="headerlink" title="GF(p)上的椭圆曲线"></a>GF(p)上的椭圆曲线</h3><p>在<a target="_blank" rel="noopener" href="https://renns.top/post/36/">密码学的近世代数基础</a>中提到密码学主要关注$GF(p)$和$GF(2^n)$两个有限域，ECC也是如此</p>
+<p>定义在GF(p)上的椭圆曲线称为<strong>素曲线</strong>，其中的<strong>系数和变量均取自</strong>$Z_p$，运算为模$p$运算，其方程为</p>
+<script type="math/tex; mode=display">
+y^2 \mod p=(x^3+ax+b)\mod p</script><p>可以证明当满足如下条件时$E_p(a,b)$为<strong>有限Abel群</strong></p>
+<script type="math/tex; mode=display">
+(4a^3+27b^2)\mod p \neq 0</script><p>有限域上的椭圆曲线算术没有显而易见的几何解释，我们试着从代数角度解释</p>
+<p>对于任意点$P,Q\in E_p(a,b)$</p>
+<ul>
+<li><p>$P+O=P$</p>
+</li>
+<li><p>若$P=(x,y)$，则$P$的负元为$-P=(x,-y)$，但是要注意<strong>负数取膜</strong><br>例如$E_{23}(1,1)$上的点$P=(13,7)$，其逆元为$-P=(13, (-7)\mod 23)=(13, 16)$</p>
+</li>
+<li><p>若$P=(x_P,y_P),Q=(x_Q,y_Q)$且$P,Q$不互为逆元，设$R=(x_R,y_R)=P+Q$，则有</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x_R=(\lambda^2-x_P-x_Q) \mod p\\
+y_R=(\lambda(x_P-x_R)-y_P) \mod p
+\end{cases}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\lambda=
+\begin{cases}
+\frac{y_Q-y_P}{x_Q-x_P}\mod p && 若p\neq Q\\
+\frac{3x_P^2+a}{2y_P}\mod p && 若p=Q
+\end{cases}</script><p>计算$\lambda$的除法定义在$Z_p$上，即需要计算乘法逆元</p>
+</li>
+<li><p>$E_p(a,b)$上的乘法定义为重复相加，例如$4P=P+P+P+P$</p>
+</li>
+</ul>
+<h3 id="GF-2-n-上的椭圆曲线"><a href="#GF-2-n-上的椭圆曲线" class="headerlink" title="GF(2^n)上的椭圆曲线"></a>GF(2^n)上的椭圆曲线</h3><p>定义在$GF(2^n)$上的椭圆曲线称为<strong>二元曲线</strong>，其中的<strong>系数和变量均取自</strong>$GF(2^n)$，运算为$GF(2^n)$上的运算</p>
+<p>$GF(2^n)$适用于椭圆密码曲线的三次方程与$GF(p)$上的略有不同，如下所示</p>
+<script type="math/tex; mode=display">
+y^2+xy=x^3+ax^2+b</script><p>可以证明，只要$b\neq 0$，即可在$E_{2^m}(a,b)$上定义一个<strong>有限Abel群</strong></p>
+<p>对于任意点$P,Q\in E_{2^,}(a,b)$</p>
+<ul>
+<li><p>$P+O=P$</p>
+</li>
+<li><p>若$P=(x,y)$，则$P$的负元为$-P=(x,x+y)$</p>
+</li>
+<li><p>若$P=(x_P,y_P),Q=(x_Q,y_Q)$为不同点且不互为逆元，设$R=(x_R,y_R)=P+Q$，则</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x_R=\lambda^2+\lambda+x_P+x_Q+a\\
+y_R=\lambda(x_P+x_R)+x_R+y_P
+\end{cases}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\lambda=\frac{y_Q+y_P}{x_Q+x_P}</script></li>
+<li><p>若$P=(x,y)$，设$R=(x_R,y_R)=P+P$，则</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x_R=\lambda^2+\lambda+a\\
+y_R=x_P^2+(\lambda+1)x_R
+\end{cases}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\lambda=x_P+\frac{y_P}{x_P}</script></li>
+</ul>
+<h2 id="椭圆曲线密码体制"><a href="#椭圆曲线密码体制" class="headerlink" title="椭圆曲线密码体制"></a>椭圆曲线密码体制</h2><p>椭圆曲线密码体制的建立是基于<strong>椭圆曲线上的计算离散对数的困难性</strong>，这个问题称为椭圆曲线对数问题</p>
+<p>考虑$Q=kP$，其中$Q,P\in E_p(a,b)$且$k&lt;p$<br>给定$k,p$，计算$Q$比较容易，而给定$Q,P$，计算$k$则比较困难</p>
+<p>在密钥长度相当时，ECC与RSA所需的计算量也差不多，但与具有同等安全性的RSA相比，ECC的密钥短得多。SP 800-57 建议至少到2030年，可接受的密钥长度对于RSA为3072~14360位，对ECC则为256~512位</p>
+<h3 id="ECC实现Diffie-Hellman密钥交换"><a href="#ECC实现Diffie-Hellman密钥交换" class="headerlink" title="ECC实现Diffie-Hellman密钥交换"></a>ECC实现Diffie-Hellman密钥交换</h3><p>以$GF(p)$上的ECC为例，首先选定大素数$p$和系数$a,b$确定$E_p(a,b)$</p>
+<p>在$E_p(a,b)$中挑选基点$G$满足$G$的阶很大，其中$G$的阶$n$定义为使得$nG=O$的最小正整数</p>
+<p>假设A希望和B交换密钥<br>A选择一个整数$n_A&lt;n$作为私钥，然后产生公钥$P_A=n_A\times G$，同理B产生私钥$n_B$和公钥$P_B$<br>之后A、B分别计算$K=n_A\times P_B$和$K=n_B\times P_A$，至此A、B完成了密钥K的共享</p>
+<h3 id="ECC的加密-解密"><a href="#ECC的加密-解密" class="headerlink" title="ECC的加密/解密"></a>ECC的加密/解密</h3><p>椭圆曲线实现的加密/解密方法有很多种，这里总结一个最简单的方法</p>
+<p>与上面ECC的DH密钥交换同理，确定$p,a,b,G$几个参数，A、B分别产生自己的公钥、私钥</p>
+<p>假设A要给B发送消息<br>A首先将明文消息$m$编码为形如$(x,y)$的点$P<em>m$<br>然后A选择一个随机正整数$k$，计算密文$C_m={kG,P_m+kP_B}={c</em>{m1}, c<em>{m2}}$<br>B要解密只需计算$P_m=c</em>{m2}-n<em>Bc</em>{m1}$</p>
+<p>上述方法中，攻击者若要从密文恢复出明文，需要从$G$和$kG$求出$k$，但这被认为是很困难的</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2022/11/22/%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/">https://niiickz.github.io/2022/11/22/%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/11/22/%E5%AF%86%E7%A0%81%E5%AD%A6Hash%E5%87%BD%E6%95%B0%E5%9F%BA%E7%A1%80/" title="密码学Hash函数基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">密码学Hash函数基础</div></div></a></div><div class="next-post pull-right"><a href="/2022/11/21/RSA%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86/" title="RSA公钥加密"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">RSA公钥加密</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/" title="A Simple Review of Spatial-based ConvGNN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">A Simple Review of Spatial-based ConvGNN</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">椭圆曲线基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%95%B0%E5%9F%9F%E4%B8%8A%E7%9A%84%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF"><span class="toc-number">1.1.</span> <span class="toc-text">实数域上的椭圆曲线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GF-p-%E4%B8%8A%E7%9A%84%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF"><span class="toc-number">1.2.</span> <span class="toc-text">GF(p)上的椭圆曲线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GF-2-n-%E4%B8%8A%E7%9A%84%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF"><span class="toc-number">1.3.</span> <span class="toc-text">GF(2^n)上的椭圆曲线</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text">椭圆曲线密码体制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ECC%E5%AE%9E%E7%8E%B0Diffie-Hellman%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2"><span class="toc-number">2.1.</span> <span class="toc-text">ECC实现Diffie-Hellman密钥交换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ECC%E7%9A%84%E5%8A%A0%E5%AF%86-%E8%A7%A3%E5%AF%86"><span class="toc-number">2.2.</span> <span class="toc-text">ECC的加密&#x2F;解密</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

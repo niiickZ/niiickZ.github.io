@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>A Simple Review of Spatial-based ConvGNN | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="相关文章：Spatial-based ConvGNN基础 DCNN论文：[1] Diffusion-convolutional neural networks [2] Diffusion convolutional recurrent neural network Data-driven traffic forecasting DCNN (Diffusion CNN) 最早由[1]提出 DCNN假">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Simple Review of Spatial-based ConvGNN">
+<meta property="og:url" content="https://niiickz.github.io/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="相关文章：Spatial-based ConvGNN基础 DCNN论文：[1] Diffusion-convolutional neural networks [2] Diffusion convolutional recurrent neural network Data-driven traffic forecasting DCNN (Diffusion CNN) 最早由[1]提出 DCNN假">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-08-03T14:34:52.000Z">
+<meta property="article:modified_time" content="2023-12-02T13:41:34.176Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://niiickz.github.io/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'A Simple Review of Spatial-based ConvGNN',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-02 21:41:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">A Simple Review of Spatial-based ConvGNN</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-08-03T14:34:52.000Z" title="Created 2023-08-03 22:34:52">2023-08-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-12-02T13:41:34.176Z" title="Updated 2023-12-02 21:41:34">2023-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="A Simple Review of Spatial-based ConvGNN"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>相关文章：<a target="_blank" rel="noopener" href="https://renns.top/post/78/">Spatial-based ConvGNN基础</a></p>
+<h2 id="DCNN"><a href="#DCNN" class="headerlink" title="DCNN"></a>DCNN</h2><p>论文：[1] <a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2016/file/390e982518a50e280d8e2b535462ec1f-Paper.pdf">Diffusion-convolutional neural networks</a> [2] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1707.01926.pdf">Diffusion convolutional recurrent neural network Data-driven traffic forecasting</a></p>
+<p>DCNN (Diffusion CNN) 最早由[1]提出</p>
+<p>DCNN假设图信号在节点间的转移是一个<strong>扩散过程</strong></p>
+<p>令$P=D^{-1}A$为<strong>归一化转移概率矩阵</strong>，$P_{ij}$表示任意时刻信息从节点$i$转移到节点$j$的概率</p>
+<p>容易看出矩阵$P$实际上就是邻接矩阵$A$的<strong>行归一化</strong>形式</p>
+<p>扩散过程实际上是一个以$P$为转移概率的马尔科夫链，那么时刻$k$的节点间的扩散概率为$P^k$</p>
+<p>于是$k$跳的图扩散卷积定义为</p>
+<script type="math/tex; mode=display">
+\mathbf{H}^{(k)}=f(\mathbf{W}^{(k)}\odot \mathbf{P}^k\mathbf{X})</script><p>其中$\odot$表示元素对应相乘</p>
+<p>容易发现$H^{(k)}$的计算没有用到上一层表示$H^{(k-1)}$，且和$X$维度相同</p>
+<p>DCNN直接对其进行拼接得$H=concat(H^{(1)},\cdots,H^{(k)})\in R^{N\times k\cdot d}$，并将其输入一个MLP得到最终图节点表示</p>
+<p>论文[2]通过如下引理对DCNN进行了改进</p>
+<blockquote>
+<p>扩散过程的平稳分布可以被表示为无限随机游走的加权和</p>
+<script type="math/tex; mode=display">
+\mathcal{P}=\sum_{k=0}^{\infty}\alpha(1-\alpha)^kP^k</script></blockquote>
+<p>使用有限步数对扩散的平稳分布进行近似，得到的DCNN表达式为</p>
+<script type="math/tex; mode=display">
+\mathbf{H}=\sum_{k=0}^Kf(\mathbf{P}^k\mathbf{X}\mathbf{W}^{(k)})</script><p>论文中作者使用这种形式的DCNN结合encoder-decoder结构构建了一个模型用于交通预测，称为DCRNN</p>
+<h2 id="RGCN"><a href="#RGCN" class="headerlink" title="RGCN"></a>RGCN</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1703.06103.pdf">Modeling Relational Data with Graph Convolutional Networks</a></p>
+<p>RGCN (Relational Graph Convolutional Network) 的motivation是建模<strong>关系数据</strong></p>
+<p>设图$G=(V,E,R)$，其中$r\in R$为一个关系类型，$(v_i,v_j,r)\in E$是一条关系类型为$r$的边，RGCN的表达式为</p>
+<script type="math/tex; mode=display">
+h_i^{(k+1)}=\sigma\left(\sum_{r\in\mathcal{R}}\sum_{j\in\mathcal{N}_i^r}\frac1{c_{i,r}}W_r^{(k)}h_j^{(k)}+W_0^{(k)}h_i^{(k)}\right)</script><p>其中$N<em>i^r$是关系$r$下与$i$相邻的顶点集合，$c</em>{i,r}$为归一化常量，可直接设定或作为参数进行学习</p>
+<p>论文中RGCN被用于知识图谱的实体分类 (entity classification) 和连接预测 (link prediction)，从更一般的观点来看，RGCN实际上提供了一种处理<strong>异构图</strong>的通用方法</p>
+<p>例如购物网站中，用户关系图和商品相似关系图作为异构的两个图，现在可以通过购买或查看等关系类型的边联系起来，作为一张图处理</p>
+<h2 id="GraphSAGE"><a href="#GraphSAGE" class="headerlink" title="GraphSAGE"></a>GraphSAGE</h2><p>论文：<a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2017/hash/5dd9db5e033da9c6fb5ba83c7a7ebea9-Abstract.html">Inductive Representation Learning on Large Graphs</a></p>
+<p>GraphSAGE (SAmple and aggreGatE) 的motivation是将GCN从transductive扩展到<strong>inductive</strong>，其表达式为</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_v^{(k)}=\sigma(\mathbf{W}^{(k)}\cdot f_k(\mathbf{h}_v^{(k-1)},\{\mathbf{h}_u^{(k-1)},\forall u\in S_{\mathcal{N}(v)}\}))</script><p>其中$S_{N(v)}$是节点$v$邻居节点的随机采样子集合，$f_k(\cdot)$为聚合函数 (aggregation function)</p>
+<p>比起GCN，该表达式其实更类似于MPNN的扩展，是标准的Spatial-based</p>
+<p>GraphSAGE最特别的地方就是<strong>使用固定大小的随机邻居节点集合进行聚合</strong>，这样卷积的复杂度就不会随图的增大而变大</p>
+<p>聚合函数$f_k$可以是定义在无序向量上的任意函数，例如Mean aggregator、LSTM aggregator、Pooling aggregator等</p>
+<p>其中使用Mean aggregator时GraphSAGE就相当于GCN的inductive变体</p>
+<h2 id="GAT"><a href="#GAT" class="headerlink" title="GAT"></a>GAT</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.10903">Graph attention networks</a></p>
+<p>GAT (Graph attention networks) 将attention思想引入了GNN，其表达式为</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_v^{(k)}=\sigma(\sum_{u\in\mathcal{N}(v)\cup v}\alpha_{vu}^{(k)}\mathbf{W}^{(k)}\mathbf{h}_u^{(k-1)})</script><p>该式的含义是使用共享参数的映射$W^{(k)}$对邻接节点分别处理，并通过<strong>加权和</strong>的方式进行聚合</p>
+<p>其中$\alpha_{vu}$就是相应连接的权重，也即attention权重，其计算方式为</p>
+<script type="math/tex; mode=display">
+e_{vu}^{(k)}=LeakyReLU\left(\mathbf{a}^T \left[\mathbf{W}^{(k)}\mathbf{h}_v^{(k-1)}||\mathbf{W}^{(k)}\mathbf{h}_u^{(k-1)}\right]\right)\\
+\alpha_{vu}^{(k)}=softmax_u(e_{vu}^{(k)})=\frac{\exp(e_{vu}^{(k)})}{\sum_{z\in N(v)}\exp(e_{vz}^{(k)})}</script><p>其中$[\cdot|\cdot]$表示concat操作，$\mathbf{a}\in R^{2d}$为可学习的向量</p>
+<p>GAT还可以进一步写为multi-head attention的形式</p>
+<script type="math/tex; mode=display">
+\mathbf{h}_v^{(k)}=concat_{h=1}^H\left\{\sigma(\sum_{u\in\mathcal{N}(v)\cup v}\alpha_{vu}^{(k)}\mathbf{W}^{(k)}_l\mathbf{h}_u^{(k-1)})\right\}</script><h2 id="MoNet"><a href="#MoNet" class="headerlink" title="MoNet"></a>MoNet</h2><p>论文：<a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2017/html/Monti_Geometric_Deep_Learning_CVPR_2017_paper.html">Geometric deep learning on graphs and manifolds using mixture model CNNs</a></p>
+<p>MoNet (mixture model networks) 提出了非欧几何（图、流形等）中的通用spatial-based卷积框架</p>
+<p>这里只关注图，设$x$是图中某个节点，$y\in N(x)$是其邻接节点，$u(x,y)$是一个$d$维伪坐标，$\mathbf{w_{\Theta}}(u)=(w_1(u),\cdots,w_J(u))$是一组可学习得权重函数</p>
+<p>聚合操作和卷积表示为</p>
+<script type="math/tex; mode=display">
+D_j(x)f=\sum_{y\in\mathcal{N}(x)}w_j(\mathbf{u}(x,y))f(y),\quad j=1,\ldots,J\\
+(f\star g)(x)=\sum_{j=1}^Jg_jD_j(x)f</script><p>通过指定不同形式的伪坐标$u(x,y)$和权重核$\mathbf{w_{\Theta}}(u)$可以得到不同的图卷积</p>
+<p>论文中给出了一种参数化方法</p>
+<script type="math/tex; mode=display">
+\mathbf{u}(x,y)=(\frac{1}{\sqrt{deg(x)}},\frac{1}{\sqrt{deg(y)}})^T\\
+w_j(\mathbf{u})=\exp(-\frac{1}{2}(\mathbf{u}-\boldsymbol{\mu}_j)^\top\boldsymbol{\Sigma}_j^{-1}(\mathbf{u}-\boldsymbol{\mu}_j))</script><p>其中$\Sigma_j,\mu_j$是可学习的高斯分布协方差矩阵与均值</p>
+<p>于是图卷积可表示为</p>
+<script type="math/tex; mode=display">
+h^{(k+1)}_x=\sum_{j=1}^J\sum_{y\in\mathcal{N}(x)}e^{-\frac{1}{2}(\tilde{\mathbf{u}}(x,y)-\boldsymbol{\mu}_j)^\top\boldsymbol{\Sigma}_j^{-1}(\tilde{\mathbf{u}}(x,y)-\boldsymbol{\mu}_j)}h^{(k)}_y</script><p>其中$\tilde{\mathbf{u}}(x,y)$是将$\mathbf{u}(x,y)$输入一个非线性全连接层得到的输出</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://niiickZ.github.io">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://niiickz.github.io/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/">https://niiickz.github.io/2023/08/03/A%20Simple%20Review%20of%20Spatial-based%20ConvGNN/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/08/05/Memory%20Networks/" title="Memory Networks"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Memory Networks</div></div></a></div><div class="next-post pull-right"><a href="/2023/08/03/Spatial-based%20ConvGNN%E5%9F%BA%E7%A1%80/" title="Spatial-based ConvGNN基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Spatial-based ConvGNN基础</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/08/01/A%20Review%20of%20Recent%20Multimodal%20ERC%20model/" title="A Review of Recent Multimodal ERC model"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-01</div><div class="title">A Review of Recent Multimodal ERC model</div></div></a></div><div><a href="/2023/03/10/Auto-Encoding%20Variational%20Bayes%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Auto-Encoding Variational Bayes论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">Auto-Encoding Variational Bayes论文解读</div></div></a></div><div><a href="/2023/09/12/A%20Simple%20Review%20of%20Pre-training%20Models%20for%20Dialogue%20System/" title="A Simple Review of Pre-training Models for Dialogue System"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">A Simple Review of Pre-training Models for Dialogue System</div></div></a></div><div><a href="/2023/09/26/ALBEF%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="ALBEF论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-26</div><div class="title">ALBEF论文解读</div></div></a></div><div><a href="/2023/09/24/BLIP-2%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="BLIP-2论文解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">BLIP-2论文解读</div></div></a></div><div><a href="/2023/08/02/ChebNet%20and%20GCN/" title="ChebNet and GCN"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-02</div><div class="title">ChebNet and GCN</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">92</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DCNN"><span class="toc-number">1.</span> <span class="toc-text">DCNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RGCN"><span class="toc-number">2.</span> <span class="toc-text">RGCN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GraphSAGE"><span class="toc-number">3.</span> <span class="toc-text">GraphSAGE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GAT"><span class="toc-number">4.</span> <span class="toc-text">GAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MoNet"><span class="toc-number">5.</span> <span class="toc-text">MoNet</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/05/IMAGEBIND%20and%20PandaGPT%E7%AE%80%E4%BB%8B/" title="IMAGEBIND and PandaGPT简介">IMAGEBIND and PandaGPT简介</a><time datetime="2023-10-05T08:15:47.000Z" title="Created 2023-10-05 16:15:47">2023-10-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/30/Flamingo%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="Flamingo论文解读">Flamingo论文解读</a><time datetime="2023-09-30T12:31:31.000Z" title="Created 2023-09-30 20:31:31">2023-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/29/OSCAR%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="OSCAR论文解读">OSCAR论文解读</a><time datetime="2023-09-29T09:32:34.000Z" title="Created 2023-09-29 17:32:34">2023-09-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/28/FlAN%E7%B3%BB%E5%88%97%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="FlAN系列论文解读">FlAN系列论文解读</a><time datetime="2023-09-28T08:43:46.000Z" title="Created 2023-09-28 16:43:46">2023-09-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/27/NExT-GPT%20Any-to-Any%20Multimodal%20LLM/" title="NExT-GPT Any-to-Any Multimodal LLM">NExT-GPT Any-to-Any Multimodal LLM</a><time datetime="2023-09-27T02:22:53.000Z" title="Created 2023-09-27 10:22:53">2023-09-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
